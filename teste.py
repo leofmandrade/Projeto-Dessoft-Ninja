@@ -1,1 +1,0 @@
-print('teu pai aquele corno')
