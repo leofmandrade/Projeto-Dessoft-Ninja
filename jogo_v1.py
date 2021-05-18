@@ -1,22 +1,27 @@
 # ===== Inicialização =====
 # ----- Importa e inicia pacotes
 import pygame
-
+import random
 pygame.init()
 
 # ----- Gera tela principal
 Width = 600
-Height = 800
+Height = 750
 window = pygame.display.set_mode((Width, Height))
-pygame.display.set_caption('Shinobi`s power')
-image = pygame.image.load('/Users/caiotieri/Documents/INSPER/DESSOFT/Projeto pygame/Projeto-Dessoft-Ninja/Fundo2.png').convert()
+pygame.display.set_caption("Run Shinobi, Run!")
+
+#------Inicia os assets
+
+image = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/FUNDOJOGO.png').convert()
+paredes = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PAREDES.png')
+placa = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PLACA.png')
 fundo = pygame.transform.scale(image, (Width, Height))
+
 # ----- Inicia estruturas de dados
 game = True
 
 # ----- Inicia assets
 font = pygame.font.SysFont(None, 48)
-text = font.render('Shinobi`s power', True, (255, 0, 0))
 
 # ===== Loop principal =====
 while game:
@@ -29,14 +34,9 @@ while game:
     window.fill((255, 255, 255))  # Preenche com a cor branca
 
     window.blit(fundo, (0, 0))
-    window.blit(text, (200, 10))
+    window.blit(paredes, (0,0))
+    window.blit(placa, (0, 0))
 
-    #---paredes
-    corparede= (100,50,50)
-    vertices1 = [(0,0),(100,0),(100,800),(0,800)]
-    vertices2= [(500,0),(600,0),(600,800),(500,800)]
-    pygame.draw.polygon(window, corparede, vertices1)
-    pygame.draw.polygon(window, corparede, vertices2)
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
 
