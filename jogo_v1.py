@@ -15,6 +15,7 @@ pygame.display.set_caption("Run Shinobi, Run!")
 image = pygame.image.load('assets/FUNDOJOGO.png').convert()
 paredes = pygame.image.load('assets/PAREDES.png')
 placa = pygame.image.load('assets/PLACA.png')
+ninjainicio = pygame.image.load('assets/NINJAINICIO.png')
 fundo = pygame.transform.scale(image, (WIDTH, HEIGHT))
 
 # ----- Inicia estruturas de dados
@@ -41,6 +42,7 @@ while game:
     window.blit(fundo, (0, 0))
     window.blit(paredes, (0,0))
     window.blit(placa, (0, 0))
+    window.blit(ninjainicio, (0,0))
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
