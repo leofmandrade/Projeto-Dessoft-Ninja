@@ -12,10 +12,10 @@ pygame.display.set_caption("Run Shinobi, Run!")
 
 #------Inicia os assets
 
-image = pygame.image.load('assets/FUNDOJOGO.png').convert()
-paredes = pygame.image.load('assets/PAREDES.png')
-placa = pygame.image.load('assets/PLACA.png')
-ninjainicio = pygame.image.load('assets/NINJAINICIO.png')
+image = pygame.image.load('assets/img/FUNDOJOGO.png').convert()
+paredes = pygame.image.load('assets/img/PAREDES.png')
+placa = pygame.image.load('assets/img/PLACA.png')
+ninjainicio = pygame.image.load('assets/img/NINJAINICIO.png')
 fundo = pygame.transform.scale(image, (WIDTH, HEIGHT))
 
 # ----- Inicia estruturas de dados
