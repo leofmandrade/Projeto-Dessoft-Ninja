@@ -5,23 +5,28 @@ import random
 pygame.init()
 
 # ----- Gera tela principal
-Width = 600
-Height = 750
-window = pygame.display.set_mode((Width, Height))
+WIDTH = 600
+HEIGHT = 750
+window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Run Shinobi, Run!")
 
 #------Inicia os assets
 
-image = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/FUNDOJOGO.png').convert()
-paredes = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PAREDES.png')
-placa = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PLACA.png')
-fundo = pygame.transform.scale(image, (Width, Height))
+image = pygame.image.load('assets/FUNDOJOGO.png').convert()
+paredes = pygame.image.load('assets/PAREDES.png')
+placa = pygame.image.load('assets/PLACA.png')
+fundo = pygame.transform.scale(image, (WIDTH, HEIGHT))
 
 # ----- Inicia estruturas de dados
+class Ninja(pygame.sprite.Sprite):
+    def __init__(self, img): 
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+
 game = True
 
-# ----- Inicia assets
-font = pygame.font.SysFont(None, 48)
 
 # ===== Loop principal =====
 while game:
