@@ -26,19 +26,27 @@ class Ninja(pygame.sprite.Sprite):
         self.image = img
         self.rect = self.image.get_rect()
 
+class Obstaculo(pygame.sprite.Sprite):
+    def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
+        
 game = True
 
+clock=pygame.time.Clock()
+FPS=60
 
 # ===== Loop principal =====
 while game:
+    clock.tick(40)
+
     # ----- Trata eventos
     for event in pygame.event.get():
         # ----- Verifica consequências
         if event.type == pygame.QUIT:
             game = False
     # ----- Gera saídas
-    window.fill((255, 255, 255))  # Preenche com a cor branca
 
+    window.fill((255, 255, 255))  # Preenche com a cor branca
     window.blit(fundo, (0, 0))
     window.blit(paredes, (0,0))
     window.blit(placa, (0, 0))
