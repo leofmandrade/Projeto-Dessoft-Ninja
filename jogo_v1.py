@@ -15,6 +15,7 @@ pygame.display.set_caption("Run Shinobi, Run!")
 image = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/FUNDOJOGO.png').convert()
 paredes = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PAREDES.png')
 placa = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PLACA.png')
+ninjainicio = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/NINJAINICIO.png')
 fundo = pygame.transform.scale(image, (Width, Height))
 
 # ----- Inicia estruturas de dados
@@ -36,6 +37,7 @@ while game:
     window.blit(fundo, (0, 0))
     window.blit(paredes, (0,0))
     window.blit(placa, (0, 0))
+    window.blit(ninjainicio, (0,0))
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
