@@ -12,8 +12,8 @@ pygame.display.set_caption("Run Shinobi, Run!")
 
 #------Inicia os assets
 
-image = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/FUNDOJOGO.png').convert()
-paredes = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PAREDES.png')
+image = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/FUNDOJOGOFINAL.png').convert()
+paredes = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PAREDESFINAL.png')
 placa = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/PLACA.png')
 ninjainicio = pygame.image.load('C:/Users/User/Desktop/INSPER/DESOFT/PYGAME/Projeto-Dessoft-Ninja/assets/NINJAINICIO.png')
 fundo = pygame.transform.scale(image, (Width, Height))
