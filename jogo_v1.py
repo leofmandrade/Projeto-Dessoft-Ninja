@@ -109,6 +109,7 @@ antenad_x = 0
 antenad_y = -600
 antenad_speedy = 5
 
+<<<<<<< HEAD
 '''
 # Criando um grupo de meteoros
 all_sprites = pygame.sprite.Group()
@@ -118,6 +119,10 @@ groups = {}
 groups['all_sprites'] = all_sprites
 groups['all_meteors'] = all_obstaculos
 groups['all_bullets'] = all_shurikens
+=======
+clock=pygame.time.Clock()
+FPS=60
+>>>>>>> 4668c27f56333896331f93c5fa203c7c01c444ff
 
 # Criando o jogador
 player = Ninja(groups, assets)
@@ -131,6 +136,8 @@ for i in range(10):
 '''
 # ===== Loop principal =====
 while game:
+    clock.tick(40)
+
     # ----- Trata eventos
     for event in pygame.event.get():
         # ----- Verifica consequências
@@ -147,6 +154,7 @@ while game:
     if antenad_y > HEIGHT:
         antenad_y = -300
     # ----- Gera saídas
+<<<<<<< HEAD
     window.fill((255, 255, 255))  # Preenche com a cor branca)
     window.blit(assets['fundo'], (0, 0))
     window.blit(assets['paredes'], (0,0))
@@ -155,6 +163,14 @@ while game:
     window.blit(assets['canoesquerda'], (canoe_x, canoe_y))
     window.blit(assets['antenadireita'], (antenad_x, antenad_y))
 
+=======
+
+    window.fill((255, 255, 255))  # Preenche com a cor branca
+    window.blit(fundo, (0, 0))
+    window.blit(paredes, (0,0))
+    window.blit(placa, (0, 0))
+    window.blit(ninjainicio, (0,0))
+>>>>>>> 4668c27f56333896331f93c5fa203c7c01c444ff
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
