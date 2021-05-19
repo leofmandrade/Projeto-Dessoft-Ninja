@@ -30,71 +30,6 @@ assets['antenadireita']= pygame.image.load('assets/img/ANTENADIREITA.png')
 assets['shuriken']= pygame.image.load('assets/img/SHURIKEN.png')
 
 # ----- Inicia estruturas de dados
-'''
-class Ninja(pygame.sprite.Sprite):
-    def __init__(self, groups, img): 
-        pygame.sprite.Sprite.__init__(self)
-        self.image = assets['ninjadireita00']
-        self.rect = self.image.get_rect()
-        self.speedx = 0
-        self.groups = groups
-        self.assets = assets
-        self.image = img
-
-    def update(self):
-        # Atualização da posição do ninja
-        self.rect.x += self.speedx
-
-        # Mantem dentro da tela
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-
-    def atirar(self):
-        # A nova bala vai ser criada logo acima e no centro horizontal da nave
-        novashuriken = Shuriken(self.assets, self.rect.top, self.rect.centerx)
-        self.groups['all_sprites'].add(novashuriken)
-        self.groups['all_bullets'].add(novashuriken)
-
-class CanoEsquerda(pygame.sprite.Sprite):
-    def __init__(self, assets):
-        # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = assets['canoesquerda']
-        self.rect = self.image.get_rect()
-        self.speedy = 5
-
-        def update(self):
-        # Atualizando a posição do cano
-            self.rect.y += self.speedy
-        # Se o cano passar do final da tela, volta para cima e sorteia
-        # novas posições e velocidades
-        if self.rect.top > HEIGHT:
-            self.speedy = 5
-
-class Shuriken(pygame.sprite.Sprite):
-    def __init__(self, assets, bottom, centerx):
-        # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = assets['shuriken']
-        self.rect = self.image.get_rect()
-
-        # Coloca no lugar inicial definido em x, y do constutor
-        self.rect.centerx = centerx
-        self.rect.bottom = bottom
-        self.speedy = -10  # Velocidade fixa para cima
-
-    def update(self):
-        # A bala só se move no eixo y
-        self.rect.y += self.speedy
-
-        # Se o tiro passar do inicio da tela, morre.
-        if self.rect.bottom < 0:
-            self.kill()
-'''
 
 game = True
 # Variável para o ajuste de velocidade
@@ -102,41 +37,24 @@ clock = pygame.time.Clock()
 FPS = 30
 #----CANO DA ESQUERDA PRONTO PORRA IHAAAAAAA
 canoe_x = 0
-canoe_y = -300
+canoe_y = -400
 canoe_speedy = 5
 #----ANTENA DA DIREITA
 antenad_x = 0
 antenad_y = -600
 antenad_speedy = 5
+#----CANO DA DIREITA
+canod_x = 0
+canod_y= -100
+canod_speedy = 5
+#----ANTENA DA ESQUERDA
+antenae_x = 0
+antenae_y = -800
+antenae_speedy = 5
 
-<<<<<<< HEAD
-'''
-# Criando um grupo de meteoros
-all_sprites = pygame.sprite.Group()
-all_obstaculos = pygame.sprite.Group()
-all_shurikens = pygame.sprite.Group()
-groups = {}
-groups['all_sprites'] = all_sprites
-groups['all_meteors'] = all_obstaculos
-groups['all_bullets'] = all_shurikens
-=======
-clock=pygame.time.Clock()
-FPS=60
->>>>>>> 4668c27f56333896331f93c5fa203c7c01c444ff
-
-# Criando o jogador
-player = Ninja(groups, assets)
-all_sprites.add(player)
-
-all_canosesquerdos = pygame.sprite.Group()
-#Criando obstáculos
-for i in range(10):
-    canoesquerda = CanoEsquerda(assets)
-    all_canosesquerdos.add(canoesquerda)
-'''
 # ===== Loop principal =====
 while game:
-    clock.tick(40)
+    clock.tick(60)
 
     # ----- Trata eventos
     for event in pygame.event.get():
@@ -148,13 +66,18 @@ while game:
     # Atualizando a posição do meteoro
     canoe_y += canoe_speedy
     antenad_y += antenad_speedy
-    # Se o meteoro passar do final da tela, volta para cima
+    canod_y += canod_speedy
+    antenae_y += antenae_speedy
+    # Se o objeto passar do final da tela, volta para cima
     if canoe_y > HEIGHT:
-        canoe_y = -300
+        canoe_y = -400
     if antenad_y > HEIGHT:
-        antenad_y = -300
+        antenad_y = -600
+    if canod_y > HEIGHT:
+        canod_y = -250
+    if antenae_y > HEIGHT:
+        antenae_y = -300
     # ----- Gera saídas
-<<<<<<< HEAD
     window.fill((255, 255, 255))  # Preenche com a cor branca)
     window.blit(assets['fundo'], (0, 0))
     window.blit(assets['paredes'], (0,0))
@@ -162,15 +85,9 @@ while game:
     window.blit(assets['ninjadireita00'],(0,0))
     window.blit(assets['canoesquerda'], (canoe_x, canoe_y))
     window.blit(assets['antenadireita'], (antenad_x, antenad_y))
+    window.blit(assets['canodireita'], (canod_x, canod_y))
+    window.blit(assets['antenaesquerda'], (antenae_x, antenae_y))
 
-=======
-
-    window.fill((255, 255, 255))  # Preenche com a cor branca
-    window.blit(fundo, (0, 0))
-    window.blit(paredes, (0,0))
-    window.blit(placa, (0, 0))
-    window.blit(ninjainicio, (0,0))
->>>>>>> 4668c27f56333896331f93c5fa203c7c01c444ff
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
