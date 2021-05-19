@@ -30,27 +30,87 @@ assets['antenadireita']= pygame.image.load('assets/img/ANTENADIREITA.png')
 assets['shuriken']= pygame.image.load('assets/img/SHURIKEN.png')
 
 # ----- Inicia estruturas de dados
+#------- Definindo novos tipos
+class CanoE(pygame.sprite.Sprite):
+    def __init__(self, img):
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = -400
+        self.speedx = 0
+        self.speedy = 5
+    
+    def update(self):
+        self.rect.y += self.speedy
+        if self.rect.top > HEIGHT:
+            self.rect.x = 0
+            self.rect.y = -400
+            self.speedx = 0
+            self.speedy = 5
 
+class CanoD(pygame.sprite.Sprite):
+    def __init__(self, img):
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = -100
+        self.speedx = 0
+        self.speedy = 5
+
+    def update(self):
+        self.rect.y += self.speedy
+        if self.rect.top > HEIGHT:
+            self.rect.x = 0
+            self.rect.y = -250
+            self.speedx = 0
+            self.speedy = 5
+
+class AntenaE(pygame.sprite.Sprite):
+    def __init__(self, img):
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = -800
+        self.speedx = 0
+        self.speedy = 5
+    
+    def update(self):
+        self.rect.y += self.speedy
+        if self.rect.top > HEIGHT:
+            self.rect.x = 0
+            self.rect.y = -300
+            self.speedx = 0
+            self.speedy = 5
+
+class AntenaD(pygame.sprite.Sprite):
+    def __init__(self, img):
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = -600
+        self.speedx = 0
+        self.speedy = 5
+    
+    def update(self):
+        self.rect.y += self.speedy
+        if self.rect.top > HEIGHT:
+            self.rect.x = 0
+            self.rect.y = -600
+            self.speedx = 0
+            self.speedy = 5
+   
 game = True
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 FPS = 30
-#----CANO DA ESQUERDA PRONTO PORRA IHAAAAAAA
-canoe_x = 0
-canoe_y = -400
-canoe_speedy = 5
-#----ANTENA DA DIREITA
-antenad_x = 0
-antenad_y = -600
-antenad_speedy = 5
-#----CANO DA DIREITA
-canod_x = 0
-canod_y= -100
-canod_speedy = 5
-#----ANTENA DA ESQUERDA
-antenae_x = 0
-antenae_y = -800
-antenae_speedy = 5
+
+#----CANOS (POR CLASS)
+canoe = CanoE(assets['canoesquerda'])
+canod = CanoD(assets['canodireita'])
+#----ANTENA (POR CLASS)
+antenae = AntenaE(assets['antenaesquerda'])
+antenad = AntenaD(assets['antenadireita'])
+
 
 # ===== Loop principal =====
 while game:
@@ -64,29 +124,21 @@ while game:
         # ----- Atualiza estado do jogo
     # ----- Atualiza estado do jogo
     # Atualizando a posição do meteoro
-    canoe_y += canoe_speedy
-    antenad_y += antenad_speedy
-    canod_y += canod_speedy
-    antenae_y += antenae_speedy
-    # Se o objeto passar do final da tela, volta para cima
-    if canoe_y > HEIGHT:
-        canoe_y = -400
-    if antenad_y > HEIGHT:
-        antenad_y = -600
-    if canod_y > HEIGHT:
-        canod_y = -250
-    if antenae_y > HEIGHT:
-        antenae_y = -300
+    canoe.update()
+    canod.update()
+    antenad.update()
+    antenae.update()
+
     # ----- Gera saídas
     window.fill((255, 255, 255))  # Preenche com a cor branca)
     window.blit(assets['fundo'], (0, 0))
     window.blit(assets['paredes'], (0,0))
     window.blit(assets['placa'], (0, 0))
     window.blit(assets['ninjadireita00'],(0,0))
-    window.blit(assets['canoesquerda'], (canoe_x, canoe_y))
-    window.blit(assets['antenadireita'], (antenad_x, antenad_y))
-    window.blit(assets['canodireita'], (canod_x, canod_y))
-    window.blit(assets['antenaesquerda'], (antenae_x, antenae_y))
+    window.blit(canoe.image, canoe.rect) 
+    window.blit(antenad.image, antenad.rect)
+    window.blit(canod.image, canod.rect)
+    window.blit(antenae.image, antenae.rect)
 
 
     # ----- Atualiza estado do jogo
