@@ -31,8 +31,17 @@ assets['shuriken']= pygame.image.load('assets/img/SHURIKEN.png')
 
 # ----- Inicia estruturas de dados
 #------- Definindo novos tipos
+class Ninja(pygame.sprite.Sprite):
+    def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
+
 class CanoE(pygame.sprite.Sprite):
     def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -50,6 +59,7 @@ class CanoE(pygame.sprite.Sprite):
 
 class CanoD(pygame.sprite.Sprite):
     def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -67,6 +77,7 @@ class CanoD(pygame.sprite.Sprite):
 
 class AntenaE(pygame.sprite.Sprite):
     def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -84,6 +95,7 @@ class AntenaE(pygame.sprite.Sprite):
 
 class AntenaD(pygame.sprite.Sprite):
     def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -104,12 +116,28 @@ game = True
 clock = pygame.time.Clock()
 FPS = 30
 
+#criando um grupo
+all_sprites = pygame.sprite.Group()
+
+#criando o jogador
+
+player = Ninja(assets['ninjadireita00'])
+
 #----CANOS (POR CLASS)
+
 canoe = CanoE(assets['canoesquerda'])
 canod = CanoD(assets['canodireita'])
 #----ANTENA (POR CLASS)
+
 antenae = AntenaE(assets['antenaesquerda'])
 antenad = AntenaD(assets['antenadireita'])
+#adicionando tudo num grupo só
+
+all_sprites.add(canoe)
+all_sprites.add(canod)
+all_sprites.add(antenae)
+all_sprites.add(antenad)
+all_sprites.add(player)
 
 
 # ===== Loop principal =====
@@ -124,23 +152,14 @@ while game:
         # ----- Atualiza estado do jogo
     # ----- Atualiza estado do jogo
     # Atualizando a posição do meteoro
-    canoe.update()
-    canod.update()
-    antenad.update()
-    antenae.update()
+    all_sprites.update()
 
     # ----- Gera saídas
     window.fill((255, 255, 255))  # Preenche com a cor branca)
     window.blit(assets['fundo'], (0, 0))
     window.blit(assets['paredes'], (0,0))
     window.blit(assets['placa'], (0, 0))
-    window.blit(assets['ninjadireita00'],(0,0))
-    window.blit(canoe.image, canoe.rect) 
-    window.blit(antenad.image, antenad.rect)
-    window.blit(canod.image, canod.rect)
-    window.blit(antenae.image, antenae.rect) ###
-    
-
+    all_sprites.draw(window)
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
