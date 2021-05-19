@@ -45,37 +45,66 @@ assets['shuriken']= pygame.image.load('assets/img/SHURIKEN.png')
 # ----- Inicia estruturas de dados
 #------- Definindo novos tipos
 class Ninja(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img, all_sprites, all_shurikens, shuriken):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = 0
+        self.rect.x = WIDTH-210
+        self.rect.y = HEIGHT-150
         self.speedx = 0
         self.speedy = 0
+        self.speedx = 0
+        self.all_sprites = all_sprites
+        self.all_shurikens = all_shurikens
+        self.shuriken = assets['shuriken']
 
     def update(self):
         self.rect.x += self.speedx
         if self.rect.x > WIDTH:
             self.rect.x = 200
-        
-            
+    
+    def shoot(self):
+        # A nova bala vai ser criada logo acima e no centro horizontal da nave
+        shuriken = Shuriken(self.shuriken, self.rect.top, self.rect.centerx)
+        self.all_sprites.add(shuriken)
+        self.all_shurikens.add(shuriken)
 
+class Shuriken(pygame.sprite.Sprite):
+    def __init__(self, img, bottom, centerx):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.centerx = centerx
+        self.rect.bottom = bottom
+        self.speedy = -10  # Velocidade fixa para cima
+
+    def update(self):
+        # A bala só se move no eixo y
+        self.rect.y += self.speedy
+
+        # Se o tiro passar do inicio da tela, morre.
+        if self.rect.bottom < 0:
+            self.kill()     
+            
 class CanoE(pygame.sprite.Sprite):
     def __init__(self, img):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = -400
+        self.rect.x = WIDTH-495
+        self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
         self.speedy = 5
     
     def update(self):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT:
-            self.rect.x = 0
-            self.rect.y = -400
+            self.rect.x = WIDTH-495
+            self.rect.y = HEIGHT-(random.randint(1000, 3500))
             self.speedx = 0
             self.speedy = 5
 
@@ -84,16 +113,16 @@ class CanoD(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = -100
+        self.rect.x = WIDTH-210
+        self.rect.y = HEIGHT-(random.randint(2000, 3500))
         self.speedx = 0
         self.speedy = 5
 
     def update(self):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT:
-            self.rect.x = 0
-            self.rect.y = -250
+            self.rect.x = WIDTH-210
+            self.rect.y = HEIGHT-(random.randint(2000, 3500))
             self.speedx = 0
             self.speedy = 5
 
@@ -102,16 +131,16 @@ class AntenaE(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = -800
+        self.rect.x = WIDTH-210
+        self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
         self.speedy = 5
     
     def update(self):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT:
-            self.rect.x = 0
-            self.rect.y = -300
+            self.rect.x = WIDTH-210
+            self.rect.y = HEIGHT-(random.randint(2000, 3500))
             self.speedx = 0
             self.speedy = 5
 
@@ -120,16 +149,16 @@ class AntenaD(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = -600
+        self.rect.x = WIDTH-495
+        self.rect.y = HEIGHT - (random.randint(1000, 3500))
         self.speedx = 0
         self.speedy = 5
     
     def update(self):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT:
-            self.rect.x = 0
-            self.rect.y = -600
+            self.rect.x = WIDTH-495
+            self.rect.y = HEIGHT-(random.randint(1000, 3500))
             self.speedx = 0
             self.speedy = 5
    
@@ -140,29 +169,46 @@ FPS = 30
 
 #criando um grupo
 all_sprites = pygame.sprite.Group()
+all_obstacles = pygame.sprite.Group()
+all_shurikens = pygame.sprite.Group()
+all_antenae = pygame.sprite.Group()
+all_antenad = pygame.sprite.Group()
+all_canoe = pygame.sprite.Group()
+all_canod = pygame.sprite.Group()
 
 #criando o jogador
 
-player = Ninja(assets['ninjadireita00'])
-
+player = Ninja(assets['ninjadireita00'], all_sprites, all_shurikens, assets['shuriken'])
 
 #----CANOS (POR CLASS)
-
 canoe = CanoE(assets['canoesquerda'])
 canod = CanoD(assets['canodireita'])
 
 #----ANTENA (POR CLASS)
 antenae = AntenaE(assets['antenaesquerda'])
 antenad = AntenaD(assets['antenadireita'])
-#adicionando tudo num grupo só
 
+#-----SHURIKEN (POR CLASS)
+#shuriken = Shuriken(assets['shuriken'], centerx, bottom=)
+
+#adicionando tudo num grupo só
 all_sprites.add(canoe)
 all_sprites.add(canod)
 all_sprites.add(antenae)
 all_sprites.add(antenad)
 all_sprites.add(player)
 
+#adicionando os obstaculos num grupo
+all_obstacles.add(canoe)
+all_obstacles.add(canod)
+all_obstacles.add(antenad)
+all_obstacles.add(antenae)
 
+#adicionando cada obstaculo no seu grupo
+all_antenad.add(antenad)
+all_antenae.add(antenae)
+all_canod.add(canod)
+all_canoe.add(canoe)
 
 # ===== Loop principal =====
 while game:
@@ -177,21 +223,64 @@ while game:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 player.image = assets['ninjapulandod02']
-
+                player.rect.x = WIDTH-352.5
+                player.rect.y = HEIGHT-200
             if event.key == pygame.K_RIGHT:
                 player.image = assets['ninjapulandoe02']
-
+                player.rect.x = WIDTH-352.5
+                player.rect.y = HEIGHT-200
+            if event.key == pygame.K_SPACE:
+                player.shoot()
         if event.type == pygame.KEYUP:
             # Dependendo da tecla, altera a velocidade.
             if event.key == pygame.K_LEFT:
                 player.image = assets['ninjaesquerda00']
+                player.rect.y = HEIGHT-150
+                player.rect.x = WIDTH-495
             if event.key == pygame.K_RIGHT:
                 player.image = assets['ninjadireita00']
+                player.rect.x = WIDTH-210
+                player.rect.y = HEIGHT-150
                 
         # ----- Atualiza estado do jogo
     # ----- Atualiza estado do jogo
-    # Atualizando a posição do meteoro
+    # Atualizando a posição do objeto
     all_sprites.update()
+
+    #-----Verifica colisão
+    hits = pygame.sprite.spritecollide(player, all_obstacles, True)
+    if len(hits) > 0:
+        game = False
+
+    # Verifica se houve colisão entre a bala e o meteoro
+    colidiuad = pygame.sprite.groupcollide(all_shurikens, all_antenad, True, True)
+    for colisoes in colidiuad:
+        antenad = AntenaD(assets['antenadireita'])
+        all_sprites.add(antenad)
+        all_obstacles.add(antenad)
+        all_antenad.add(antenad)
+
+    colidiuae = pygame.sprite.groupcollide(all_shurikens, all_antenae, True, True)
+    for colisoes in colidiuae:
+        antenae = AntenaE(assets['antenaesquerda'])
+        all_sprites.add(antenae)
+        all_obstacles.add(antenae)
+        all_antenae.add(antenae)
+
+    colidiucd = pygame.sprite.groupcollide(all_shurikens, all_canod, True, True)
+    for colisoes in colidiucd:
+        cd = CanoD(assets['canodireita'])
+        all_sprites.add(cd)
+        all_obstacles.add(cd)
+        all_canod.add(cd)
+    
+    colidiuce = pygame.sprite.groupcollide(all_shurikens, all_canoe, True, True)
+    for colisoes in colidiuce:
+        ce = CanoE(assets['canoesquerda'])
+        all_sprites.add(ce)
+        all_obstacles.add(ce)
+        all_canoe.add(ce)
+
 
     # ----- Gera saídas
     window.fill((255, 255, 255))  # Preenche com a cor branca)
