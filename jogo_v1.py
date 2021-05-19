@@ -138,7 +138,8 @@ while game:
     window.blit(canoe.image, canoe.rect) 
     window.blit(antenad.image, antenad.rect)
     window.blit(canod.image, canod.rect)
-    window.blit(antenae.image, antenae.rect)
+    window.blit(antenae.image, antenae.rect) ###
+    
 
 
     # ----- Atualiza estado do jogo
