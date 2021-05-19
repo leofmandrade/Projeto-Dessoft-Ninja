@@ -2,6 +2,9 @@
 # ----- Importa e inicia pacotes
 import pygame
 import random
+import time
+
+from pygame.constants import KEYDOWN
 pygame.init()
 
 # ----- Gera tela principal
@@ -17,9 +20,19 @@ assets['fundo'] = pygame.image.load('assets/img/FUNDOJOGOFINAL.png').convert()
 assets['paredes'] = pygame.image.load('assets/img/PAREDESFINAL.png')
 assets['placa'] = pygame.image.load('assets/img/PLACA.png')
 #-----Imagens do ninja
+#Ninja andando
 assets['ninjainicio'] = pygame.image.load('assets/img/NINJAINICIO.png')
 assets['ninjadireita00'] = pygame.image.load('assets/img/NINJAANDANDODIREITA00.png')
 assets['ninjaesquerda00'] = pygame.image.load('assets/img/NINJAANDANDOESQUERDA00.png')
+assets['ninjadireita01'] = pygame.image.load('assets/img/NINJAANDANDODIREITA01.png')
+assets['ninjaesquerda01'] = pygame.image.load('assets/img/NINJAANDANDOESQUERDA01.png')
+#Ninja Pulando
+assets['ninjapulandod01'] = pygame.image.load('assets/img/NINJAPULANDODIREITA01.png')
+assets['ninjapulandod02'] = pygame.image.load('assets/img/NINJAPULANDODIREITA02.png')
+assets['ninjapulandod03'] = pygame.image.load('assets/img/NINJAPULANDODIREITA03.png')
+assets['ninjapulandoe01'] = pygame.image.load('assets/img/NINJAPULANDOESQUERDA01.png')
+assets['ninjapulandoe02'] = pygame.image.load('assets/img/NINJAPULANDOESQUERDA02.png')
+assets['ninjapulandoe03'] = pygame.image.load('assets/img/NINJAPULANDOESQUERDA03.png')
 
 #-----Imagens dos obstáculos
 assets['canoesquerda']= pygame.image.load('assets/img/CANOESQUERDA.png')
@@ -38,6 +51,15 @@ class Ninja(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0
+        self.speedx = 0
+        self.speedy = 0
+
+    def update(self):
+        self.rect.x += self.speedx
+        if self.rect.x > WIDTH:
+            self.rect.x = 200
+        
+            
 
 class CanoE(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -123,12 +145,13 @@ all_sprites = pygame.sprite.Group()
 
 player = Ninja(assets['ninjadireita00'])
 
+
 #----CANOS (POR CLASS)
 
 canoe = CanoE(assets['canoesquerda'])
 canod = CanoD(assets['canodireita'])
-#----ANTENA (POR CLASS)
 
+#----ANTENA (POR CLASS)
 antenae = AntenaE(assets['antenaesquerda'])
 antenad = AntenaD(assets['antenadireita'])
 #adicionando tudo num grupo só
@@ -140,6 +163,7 @@ all_sprites.add(antenad)
 all_sprites.add(player)
 
 
+
 # ===== Loop principal =====
 while game:
     clock.tick(60)
@@ -149,6 +173,21 @@ while game:
         # ----- Verifica consequências
         if event.type == pygame.QUIT:
             game = False
+        # ----- Verifica se apertou alguma tecla
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player.image = assets['ninjapulandod02']
+
+            if event.key == pygame.K_RIGHT:
+                player.image = assets['ninjapulandoe02']
+
+        if event.type == pygame.KEYUP:
+            # Dependendo da tecla, altera a velocidade.
+            if event.key == pygame.K_LEFT:
+                player.image = assets['ninjaesquerda00']
+            if event.key == pygame.K_RIGHT:
+                player.image = assets['ninjadireita00']
+                
         # ----- Atualiza estado do jogo
     # ----- Atualiza estado do jogo
     # Atualizando a posição do meteoro
