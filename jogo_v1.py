@@ -3,7 +3,6 @@
 import pygame
 import random
 import time
-
 from pygame.constants import KEYDOWN
 pygame.init()
 
@@ -86,8 +85,9 @@ class Shuriken(pygame.sprite.Sprite):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = img
+        self.image = assets['shuriken']
         self.rect = self.image.get_rect()
+        self.last_update = pygame.time.get_ticks()
 
         # Coloca no lugar inicial definido em x, y do constutor
         self.rect.centerx = centerx
@@ -270,10 +270,10 @@ all_antenae.add(antenae)
 all_canod.add(canod)
 all_canoe.add(canoe)
 
+i= 0
 # ===== Loop principal =====
 while game:
     clock.tick(60)
-
     # ----- Trata eventos
     for event in pygame.event.get():
         # ----- Verifica consequências
@@ -290,7 +290,9 @@ while game:
                 player.rect.x = WIDTH-352.5
                 player.rect.y = HEIGHT-200
             if event.key == pygame.K_SPACE:
-                player.shoot()
+                if i < 3:
+                    player.shoot()
+                    i += 1
         if event.type == pygame.KEYUP:
             # Dependendo da tecla, altera a velocidade.
             if event.key == pygame.K_LEFT:
