@@ -270,7 +270,9 @@ all_antenae.add(antenae)
 all_canod.add(canod)
 all_canoe.add(canoe)
 
-i= 0
+#adicionando um numero limitado de shurikens
+numeroshurikens= 0
+
 # ===== Loop principal =====
 while game:
     clock.tick(60)
@@ -290,9 +292,9 @@ while game:
                 player.rect.x = WIDTH-352.5
                 player.rect.y = HEIGHT-200
             if event.key == pygame.K_SPACE:
-                if i < 3:
+                if numeroshurikens < 3:
                     player.shoot()
-                    i += 1
+                    numeroshurikens += 1
         if event.type == pygame.KEYUP:
             # Dependendo da tecla, altera a velocidade.
             if event.key == pygame.K_LEFT:
