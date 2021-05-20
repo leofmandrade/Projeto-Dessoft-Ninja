@@ -42,18 +42,29 @@ assets['antenadireita']= pygame.image.load('assets/img/ANTENADIREITA.png')
 #-----Imagem do projétil
 assets['shuriken']= pygame.image.load('assets/img/SHURIKEN.png')
 
+#-----Imagem da explosão
+assets['explosion00'] = pygame.image.load('assets/img/EXPLOSAO00.png')
+explosao = []
+for i in range(6):
+    diretorio = 'assets/img/EXPLOSAO0{}.png'.format(i)
+    img = pygame.image.load(diretorio).convert()
+    img = pygame.transform.scale(img, (60, 60))
+    explosao.append(img) 
+assets['explosao']= explosao
+
 # ----- Inicia estruturas de dados
 #------- Definindo novos tipos
 class Ninja(pygame.sprite.Sprite):
-    def __init__(self, img, all_sprites, all_shurikens, shuriken):
+    def __init__(self, groups, assets):
         pygame.sprite.Sprite.__init__(self)
-        self.image = img
+        self.image = assets['ninjadireita00']
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH-210
         self.rect.y = HEIGHT-150
         self.speedx = 0
         self.speedy = 0
-        self.speedx = 0
+        self.groups = groups
+        self.assets = assets
         self.all_sprites = all_sprites
         self.all_shurikens = all_shurikens
         self.shuriken = assets['shuriken']
@@ -98,7 +109,7 @@ class CanoE(pygame.sprite.Sprite):
         self.rect.x = WIDTH-495
         self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
-        self.speedy = 5
+        self.speedy = 7
     
     def update(self):
         self.rect.y += self.speedy
@@ -106,7 +117,7 @@ class CanoE(pygame.sprite.Sprite):
             self.rect.x = WIDTH-495
             self.rect.y = HEIGHT-(random.randint(1000, 3500))
             self.speedx = 0
-            self.speedy = 5
+            self.speedy = 7
 
 class CanoD(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -116,7 +127,7 @@ class CanoD(pygame.sprite.Sprite):
         self.rect.x = WIDTH-210
         self.rect.y = HEIGHT-(random.randint(2000, 3500))
         self.speedx = 0
-        self.speedy = 5
+        self.speedy = 7
 
     def update(self):
         self.rect.y += self.speedy
@@ -124,7 +135,7 @@ class CanoD(pygame.sprite.Sprite):
             self.rect.x = WIDTH-210
             self.rect.y = HEIGHT-(random.randint(2000, 3500))
             self.speedx = 0
-            self.speedy = 5
+            self.speedy = 7
 
 class AntenaE(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -134,7 +145,7 @@ class AntenaE(pygame.sprite.Sprite):
         self.rect.x = WIDTH-210
         self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
-        self.speedy = 5
+        self.speedy = 7
     
     def update(self):
         self.rect.y += self.speedy
@@ -142,7 +153,7 @@ class AntenaE(pygame.sprite.Sprite):
             self.rect.x = WIDTH-210
             self.rect.y = HEIGHT-(random.randint(2000, 3500))
             self.speedx = 0
-            self.speedy = 5
+            self.speedy = 7
 
 class AntenaD(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -152,7 +163,7 @@ class AntenaD(pygame.sprite.Sprite):
         self.rect.x = WIDTH-495
         self.rect.y = HEIGHT - (random.randint(1000, 3500))
         self.speedx = 0
-        self.speedy = 5
+        self.speedy = 7
     
     def update(self):
         self.rect.y += self.speedy
@@ -160,25 +171,76 @@ class AntenaD(pygame.sprite.Sprite):
             self.rect.x = WIDTH-495
             self.rect.y = HEIGHT-(random.randint(1000, 3500))
             self.speedx = 0
-            self.speedy = 5
-   
+            self.speedy = 7
+
+class Explosao(pygame.sprite.Sprite):
+    def __init__(self, center, assets):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.explosao = assets['explosao']
+
+        self.frame = 0
+        self.image = self.explosao[self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+
+        self.last_update = pygame.time.get_ticks()
+
+        self.frame_ticks = 100
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = now
+            self.frame += 1
+
+        
+            # Verifica se já chegou no final da animação.
+            if self.frame == len(self.explosao):
+                # Se sim, tchau explosão!
+                self.kill()
+            else:
+                # Se ainda não chegou ao fim da explosão, troca de imagem.
+                center = self.rect.center
+                self.image = self.explosao[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
+
 game = True
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 FPS = 30
-
-#criando um grupo
+#criando dicionario de grupos
+groups = {}
+#criando grupos
+#sprites
 all_sprites = pygame.sprite.Group()
+#obstaculos
 all_obstacles = pygame.sprite.Group()
+#shurikens
 all_shurikens = pygame.sprite.Group()
+#grupo para cada obstaculo individual
 all_antenae = pygame.sprite.Group()
 all_antenad = pygame.sprite.Group()
 all_canoe = pygame.sprite.Group()
 all_canod = pygame.sprite.Group()
 
-#criando o jogador
+#adicionando no dicionario
+groups['all_sprites']=all_sprites
+groups['all_obstacles']=all_obstacles
+groups['all_shurikens'] = all_shurikens
+groups['all_antenae'] = all_antenae
+groups['all_antenad'] = all_antenad
+groups['all_canoe'] = all_canoe
+groups['all_canod'] = all_canod
 
-player = Ninja(assets['ninjadireita00'], all_sprites, all_shurikens, assets['shuriken'])
+#criando o jogador
+player = Ninja(groups, assets)
 
 #----CANOS (POR CLASS)
 canoe = CanoE(assets['canoesquerda'])
@@ -187,9 +249,6 @@ canod = CanoD(assets['canodireita'])
 #----ANTENA (POR CLASS)
 antenae = AntenaE(assets['antenaesquerda'])
 antenad = AntenaD(assets['antenadireita'])
-
-#-----SHURIKEN (POR CLASS)
-#shuriken = Shuriken(assets['shuriken'], centerx, bottom=)
 
 #adicionando tudo num grupo só
 all_sprites.add(canoe)
@@ -259,6 +318,9 @@ while game:
         all_sprites.add(antenad)
         all_obstacles.add(antenad)
         all_antenad.add(antenad)
+        
+        explosao = Explosao(colisoes.rect.center, assets)
+        all_sprites.add(explosao)
 
     colidiuae = pygame.sprite.groupcollide(all_shurikens, all_antenae, True, True)
     for colisoes in colidiuae:
@@ -267,12 +329,18 @@ while game:
         all_obstacles.add(antenae)
         all_antenae.add(antenae)
 
+        explosao = Explosao(colisoes.rect.center, assets)
+        all_sprites.add(explosao)
+
     colidiucd = pygame.sprite.groupcollide(all_shurikens, all_canod, True, True)
     for colisoes in colidiucd:
         cd = CanoD(assets['canodireita'])
         all_sprites.add(cd)
         all_obstacles.add(cd)
         all_canod.add(cd)
+
+        explosao = Explosao(colisoes.rect.center, assets)
+        all_sprites.add(explosao)
     
     colidiuce = pygame.sprite.groupcollide(all_shurikens, all_canoe, True, True)
     for colisoes in colidiuce:
@@ -280,6 +348,9 @@ while game:
         all_sprites.add(ce)
         all_obstacles.add(ce)
         all_canoe.add(ce)
+
+        explosao = Explosao(colisoes.rect.center, assets)
+        all_sprites.add(explosao)
 
 
     # ----- Gera saídas
