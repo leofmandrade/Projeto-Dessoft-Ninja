@@ -10,6 +10,7 @@ pygame.init()
 # ----- Gera tela principal
 WIDTH = 600
 HEIGHT = 750
+color_key = (0, 89, 255)
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Run Shinobi, Run!")
 
@@ -48,7 +49,7 @@ explosao = []
 for i in range(6):
     diretorio = 'assets/img/EXPLOSAO0{}.png'.format(i)
     img = pygame.image.load(diretorio).convert()
-    img = pygame.transform.scale(img, (60, 60))
+    img.set_colorkey(color_key)
     explosao.append(img) 
 assets['explosao']= explosao
 
@@ -186,7 +187,7 @@ class Explosao(pygame.sprite.Sprite):
 
         self.last_update = pygame.time.get_ticks()
 
-        self.frame_ticks = 100
+        self.frame_ticks = 50
 
     def update(self):
         # Verifica o tick atual.
@@ -319,6 +320,7 @@ while game:
         all_obstacles.add(antenad)
         all_antenad.add(antenad)
         
+
         explosao = Explosao(colisoes.rect.center, assets)
         all_sprites.add(explosao)
 
