@@ -21,11 +21,11 @@ assets['paredes'] = pygame.image.load('assets/img/PAREDESFINAL.png')
 assets['placa'] = pygame.image.load('assets/img/PLACA.png')
 #-----Imagens do ninja
 #Ninja andando
-assets['ninjainicio'] = pygame.image.load('assets/img/NINJAINICIO.png')
 assets['ninjadireita00'] = pygame.image.load('assets/img/NINJAANDANDODIREITA00.png')
 assets['ninjaesquerda00'] = pygame.image.load('assets/img/NINJAANDANDOESQUERDA00.png')
 assets['ninjadireita01'] = pygame.image.load('assets/img/NINJAANDANDODIREITA01.png')
 assets['ninjaesquerda01'] = pygame.image.load('assets/img/NINJAANDANDOESQUERDA01.png')
+
 #Ninja Pulando
 assets['ninjapulandod01'] = pygame.image.load('assets/img/NINJAPULANDODIREITA01.png')
 assets['ninjapulandod02'] = pygame.image.load('assets/img/NINJAPULANDODIREITA02.png')
@@ -69,6 +69,11 @@ class Ninja(pygame.sprite.Sprite):
         self.all_sprites = all_sprites
         self.all_shurikens = all_shurikens
         self.shuriken = assets['shuriken']
+        self.frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_ticks = 150
+        self.andandodireita = [assets['ninjadireita01'], assets['ninjadireita00']]
+        self.andandoesquerda = [assets['ninjaesquerda00'], assets['ninjaesquerda01']]
     
     def move(self, direcao):
         if direcao == 'esquerda':
@@ -77,17 +82,34 @@ class Ninja(pygame.sprite.Sprite):
             self.lado = 'meioesquerda'
 
     def update(self):
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
         self.rect.x += self.speedx
         if self.rect.x > WIDTH:
             self.rect.x = 200
         if self.lado == 'direita':
-            self.image = assets['ninjadireita00']
             self.rect.x = WIDTH-210 #posicao na direita
             self.rect.y = HEIGHT-150 ###############
+            if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+                self.last_update = now
+                self.frame += 1
+                if self.frame >= len(self.andandodireita):
+                    self.frame = 0
+                self.image = self.andandodireita[self.frame]
+
         if self.lado == 'esquerda':
             player.rect.y = HEIGHT-150
-            player.rect.x = WIDTH-495
-            self.image = assets['ninjaesquerda00']
+            player.rect.x = WIDTH-490
+            if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+                self.last_update = now
+                self.frame += 1
+                if self.frame >= len(self.andandodireita):
+                    self.frame = 0
+                self.image = self.andandoesquerda[self.frame]
+
         if self.lado == 'meiodireita':
             self.image = assets['ninjapulandoe02']
             player.rect.x = WIDTH-352.5
