@@ -59,20 +59,46 @@ class Ninja(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = assets['ninjadireita00']
         self.rect = self.image.get_rect()
-        self.rect.x = WIDTH-210
-        self.rect.y = HEIGHT-150
+        self.rect.x = WIDTH-210 #posicao na direita
+        self.rect.y = HEIGHT-150 ###############
         self.speedx = 0
         self.speedy = 0
+        self.lado = 'direita'
         self.groups = groups
         self.assets = assets
         self.all_sprites = all_sprites
         self.all_shurikens = all_shurikens
         self.shuriken = assets['shuriken']
+    
+    def move(self, direcao):
+        if direcao == 'esquerda':
+            self.lado = 'meiodireita'
+        if direcao == 'direita':
+            self.lado = 'meioesquerda'
 
     def update(self):
         self.rect.x += self.speedx
         if self.rect.x > WIDTH:
             self.rect.x = 200
+        if self.lado == 'direita':
+            self.image = assets['ninjadireita00']
+            self.rect.x = WIDTH-210 #posicao na direita
+            self.rect.y = HEIGHT-150 ###############
+        if self.lado == 'esquerda':
+            player.rect.y = HEIGHT-150
+            player.rect.x = WIDTH-495
+            self.image = assets['ninjaesquerda00']
+        if self.lado == 'meiodireita':
+            self.image = assets['ninjapulandoe02']
+            player.rect.x = WIDTH-352.5
+            player.rect.y = HEIGHT-200
+            self.lado = 'esquerda'
+        if self.lado == 'meioesquerda':
+            self.image = assets['ninjapulandod02']
+            player.rect.x = WIDTH-352.5
+            player.rect.y = HEIGHT-200
+            self.lado = 'direita'
+        
     
     def shoot(self):
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
@@ -284,13 +310,15 @@ while game:
         # ----- Verifica se apertou alguma tecla
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                player.image = assets['ninjapulandod02']
-                player.rect.x = WIDTH-352.5
-                player.rect.y = HEIGHT-200
+                if player.lado == 'direita':
+                    player.move('esquerda')
+               # player.rect.x = WIDTH-352.5
+              #  player.rect.y = HEIGHT-200
             if event.key == pygame.K_RIGHT:
-                player.image = assets['ninjapulandoe02']
-                player.rect.x = WIDTH-352.5
-                player.rect.y = HEIGHT-200
+                if player.lado == 'esquerda':
+                    player.move('direita')
+              #  player.rect.x = WIDTH-352.5
+              #   player.rect.y = HEIGHT-200
             if event.key == pygame.K_SPACE:
                 if numeroshurikens < 3:
                     player.shoot()
@@ -298,11 +326,9 @@ while game:
         if event.type == pygame.KEYUP:
             # Dependendo da tecla, altera a velocidade.
             if event.key == pygame.K_LEFT:
-                player.image = assets['ninjaesquerda00']
                 player.rect.y = HEIGHT-150
                 player.rect.x = WIDTH-495
             if event.key == pygame.K_RIGHT:
-                player.image = assets['ninjadireita00']
                 player.rect.x = WIDTH-210
                 player.rect.y = HEIGHT-150
                 
