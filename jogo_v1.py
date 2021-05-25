@@ -58,6 +58,7 @@ pygame.mixer.music.load('assets/img/snd/MusicaNaruto.ogg')
 pygame.mixer.music.set_volume(0.4)
 shuriken_sound = pygame.mixer.Sound('assets/img/snd/ThrowingShuriken.wav')
 jump_sound = pygame.mixer.Sound('assets/img/snd/JumpSound.wav')
+collision_sound = pygame.mixer.Sound('assets/img/snd/CollisionSound.wav')
 
 # ----- Inicia estruturas de dados
 #------- Definindo novos tipos
@@ -377,7 +378,10 @@ while game:
     #-----Verifica colisão
     hits = pygame.sprite.spritecollide(player, all_obstacles, True)
     if len(hits) > 0:
+        collision_sound.play()
+        time.sleep(0.5)
         game = False
+        
 
     # Verifica se houve colisão entre a bala e o meteoro
     colidiuad = pygame.sprite.groupcollide(all_shurikens, all_antenad, True, True)
