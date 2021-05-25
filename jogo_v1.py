@@ -159,6 +159,8 @@ class CanoE(pygame.sprite.Sprite):
         self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
         self.speedy = 7
+       # self.frame_ticksCANOE = 10000
+       # self.last_updateCANOE = pygame.time.get_ticks()
     
     def update(self):
         self.rect.y += self.speedy
@@ -166,7 +168,9 @@ class CanoE(pygame.sprite.Sprite):
             self.rect.x = WIDTH-495
             self.rect.y = HEIGHT-(random.randint(1000, 3500))
             self.speedx = 0
-            self.speedy = 7
+       # now = pygame.time.get_ticks()
+       # elapsed_ticksCANOE = now - self.last_updateCANOE 
+
 
 class CanoD(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -184,7 +188,6 @@ class CanoD(pygame.sprite.Sprite):
             self.rect.x = WIDTH-210
             self.rect.y = HEIGHT-(random.randint(2000, 3500))
             self.speedx = 0
-            self.speedy = 7
 
 class AntenaE(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -202,7 +205,7 @@ class AntenaE(pygame.sprite.Sprite):
             self.rect.x = WIDTH-210
             self.rect.y = HEIGHT-(random.randint(2000, 3500))
             self.speedx = 0
-            self.speedy = 7
+
 
 class AntenaD(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -210,7 +213,7 @@ class AntenaD(pygame.sprite.Sprite):
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH-495
-        self.rect.y = HEIGHT - (random.randint(1000, 3500))
+        self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
         self.speedy = 7
     
@@ -220,7 +223,6 @@ class AntenaD(pygame.sprite.Sprite):
             self.rect.x = WIDTH-495
             self.rect.y = HEIGHT-(random.randint(1000, 3500))
             self.speedx = 0
-            self.speedy = 7
 
 class Explosao(pygame.sprite.Sprite):
     def __init__(self, center, assets):
@@ -320,10 +322,36 @@ all_canoe.add(canoe)
 
 #adicionando um numero limitado de shurikens
 numeroshurikens= 0
-
+ticks_0 = 0
 # ===== Loop principal =====
 while game:
-    clock.tick(60)
+    #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
+    if ticks_0 >= 200:
+        canoe.speedy += 3
+        canoe.rect.y += canoe.speedy
+        canoe.speedx = 0
+        print(canoe.speedy)
+
+        canod.speedy += 3
+        canod.rect.y += canod.speedy
+        canod.speedx = 0
+        print(canod.speedy)
+
+        antenad.speedy += 3
+        antenad.rect.y += antenad.speedy
+        antenad.speedx = 0
+        print(antenad.speedy)
+
+        antenae.speedy += 3
+        antenae.rect.y += antenae.speedy
+        antenae.speedx = 0
+        print(antenae.speedy)
+        ticks_0 = 0
+
+    ticks_0 += 1  
+    numeroshurikens = 0
+    ticks_0 += 1
+    
     # ----- Trata eventos
     for event in pygame.event.get():
         # ----- Verifica consequências
@@ -342,7 +370,7 @@ while game:
               #  player.rect.x = WIDTH-352.5
               #   player.rect.y = HEIGHT-200
             if event.key == pygame.K_SPACE:
-                if numeroshurikens < 3:
+                if numeroshurikens < 20000:
                     player.shoot()
                     numeroshurikens += 1
         if event.type == pygame.KEYUP:
