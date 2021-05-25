@@ -5,6 +5,7 @@ import random
 import time
 from pygame.constants import KEYDOWN
 pygame.init()
+pygame.mixer.init()
 
 # ----- Gera tela principal
 WIDTH = 600
@@ -52,6 +53,13 @@ for i in range(6):
     explosao.append(img) 
 assets['explosao']= explosao
 
+# Carrega os sons do jogo
+pygame.mixer.music.load('assets/img/snd/MusicaNaruto.ogg')
+pygame.mixer.music.set_volume(0.4)
+shuriken_sound = pygame.mixer.Sound('assets/img/snd/ThrowingShuriken.wav')
+jump_sound = pygame.mixer.Sound('assets/img/snd/JumpSound.wav')
+collision_sound = pygame.mixer.Sound('assets/img/snd/CollisionSound.wav')
+
 # ----- Inicia estruturas de dados
 #------- Definindo novos tipos
 class Ninja(pygame.sprite.Sprite):
@@ -74,7 +82,8 @@ class Ninja(pygame.sprite.Sprite):
         self.frame_ticks = 150
         self.andandodireita = [assets['ninjadireita01'], assets['ninjadireita00']]
         self.andandoesquerda = [assets['ninjaesquerda00'], assets['ninjaesquerda01']]
-    
+
+
     def move(self, direcao):
         if direcao == 'esquerda':
             self.lado = 'meiodireita'
@@ -120,16 +129,17 @@ class Ninja(pygame.sprite.Sprite):
             player.rect.x = WIDTH-352.5
             player.rect.y = HEIGHT-200
             self.lado = 'direita'
+
         
     
     def shoot(self):
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
-        shuriken = Shuriken(self.shuriken, self.rect.top, self.rect.centerx)
+        shuriken = Shuriken(self.shuriken, self.rect.top, self.rect.centerx, shuriken_sound)
         self.all_sprites.add(shuriken)
         self.all_shurikens.add(shuriken)
 
 class Shuriken(pygame.sprite.Sprite):
-    def __init__(self, img, bottom, centerx):
+    def __init__(self, img, bottom, centerx, shuriken_sound):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
@@ -141,6 +151,7 @@ class Shuriken(pygame.sprite.Sprite):
         self.rect.centerx = centerx
         self.rect.bottom = bottom
         self.speedy = -10  # Velocidade fixa para cima
+        self.shuriken_sound = shuriken_sound
 
     def update(self):
         # A bala só se move no eixo y
@@ -148,7 +159,8 @@ class Shuriken(pygame.sprite.Sprite):
 
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
-            self.kill()     
+            self.kill()  
+        self.shuriken_sound.play()   
             
 class CanoE(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -324,6 +336,7 @@ all_canoe.add(canoe)
 numeroshurikens= 0
 ticks_0 = 0
 # ===== Loop principal =====
+pygame.mixer.music.play(loops=-1)
 while game:
     #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
     if ticks_0 >= 200:
@@ -362,11 +375,13 @@ while game:
             if event.key == pygame.K_LEFT:
                 if player.lado == 'direita':
                     player.move('esquerda')
+                jump_sound.play()
                # player.rect.x = WIDTH-352.5
               #  player.rect.y = HEIGHT-200
             if event.key == pygame.K_RIGHT:
                 if player.lado == 'esquerda':
                     player.move('direita')
+                jump_sound.play()
               #  player.rect.x = WIDTH-352.5
               #   player.rect.y = HEIGHT-200
             if event.key == pygame.K_SPACE:
@@ -381,6 +396,7 @@ while game:
             if event.key == pygame.K_RIGHT:
                 player.rect.x = WIDTH-210
                 player.rect.y = HEIGHT-150
+            
                 
         # ----- Atualiza estado do jogo
     # ----- Atualiza estado do jogo
@@ -390,7 +406,10 @@ while game:
     #-----Verifica colisão
     hits = pygame.sprite.spritecollide(player, all_obstacles, True)
     if len(hits) > 0:
+        collision_sound.play()
+        time.sleep(0.5)
         game = False
+        
 
     # Verifica se houve colisão entre a bala e o meteoro
     colidiuad = pygame.sprite.groupcollide(all_shurikens, all_antenad, True, True)
