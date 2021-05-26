@@ -4,6 +4,7 @@ import pygame
 import random
 import time
 from pygame.constants import KEYDOWN
+from sympy import SparseNDimArray
 pygame.init()
 pygame.mixer.init()
 
@@ -163,14 +164,14 @@ class Shuriken(pygame.sprite.Sprite):
         self.shuriken_sound.play()   
             
 class CanoE(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img, spd):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH-495
         self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
-        self.speedy = 7
+        self.speedy = spd
        # self.frame_ticksCANOE = 10000
        # self.last_updateCANOE = pygame.time.get_ticks()
     
@@ -185,14 +186,14 @@ class CanoE(pygame.sprite.Sprite):
 
 
 class CanoD(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img,spd):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH-210
         self.rect.y = HEIGHT-(random.randint(2000, 3500))
         self.speedx = 0
-        self.speedy = 7
+        self.speedy = spd
 
     def update(self):
         self.rect.y += self.speedy
@@ -202,14 +203,14 @@ class CanoD(pygame.sprite.Sprite):
             self.speedx = 0
 
 class AntenaE(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img, spd):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH-210
         self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
-        self.speedy = 7
+        self.speedy = spd
     
     def update(self):
         self.rect.y += self.speedy
@@ -220,14 +221,14 @@ class AntenaE(pygame.sprite.Sprite):
 
 
 class AntenaD(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img, spd):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH-495
         self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
-        self.speedy = 7
+        self.speedy = spd
     
     def update(self):
         self.rect.y += self.speedy
@@ -305,13 +306,18 @@ groups['all_canod'] = all_canod
 #criando o jogador
 player = Ninja(groups, assets)
 
+#variaveis iniciais velocidade
+spdcanoe = 7
+spdcanod = 7
+spdantenae = 7
+spdantenad = 7
 #----CANOS (POR CLASS)
-canoe = CanoE(assets['canoesquerda'])
-canod = CanoD(assets['canodireita'])
+canoe = CanoE(assets['canoesquerda'],spdcanoe)
+canod = CanoD(assets['canodireita'],spdcanod)
 
 #----ANTENA (POR CLASS)
-antenae = AntenaE(assets['antenaesquerda'])
-antenad = AntenaD(assets['antenadireita'])
+antenae = AntenaE(assets['antenaesquerda'],spdantenae)
+antenad = AntenaD(assets['antenadireita'],spdantenad)
 
 #adicionando tudo num grupo só
 all_sprites.add(canoe)
@@ -339,27 +345,40 @@ ticks_0 = 0
 pygame.mixer.music.play(loops=-1)
 while game:
     #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
-    if ticks_0 >= 200:
+    print('canoe.speedy')
+    print(canoe.speedy)
+    print('canod.speedy')
+    print(canod.speedy)
+    print('antenad.speedy')
+    print(antenad.speedy)
+    print('antenae.speedy')
+    print(antenae.speedy)
+    print('####')
+    
+    if ticks_0 >= 100:
+
         canoe.speedy += 3
         canoe.rect.y += canoe.speedy
         canoe.speedx = 0
-        print(canoe.speedy)
+        
+
 
         canod.speedy += 3
         canod.rect.y += canod.speedy
         canod.speedx = 0
-        print(canod.speedy)
+        
+
 
         antenad.speedy += 3
         antenad.rect.y += antenad.speedy
         antenad.speedx = 0
-        print(antenad.speedy)
+        
+
 
         antenae.speedy += 3
         antenae.rect.y += antenae.speedy
         antenae.speedx = 0
-        print(antenae.speedy)
-        print('####')
+
         ticks_0 = 0
         numeroshurikens = 0
     ticks_0 += 1  
@@ -403,7 +422,10 @@ while game:
     all_sprites.update()
 
     #-----Verifica colisão
+    
     hits = pygame.sprite.spritecollide(player, all_obstacles, True)
+
+
     if len(hits) > 0:
         collision_sound.play()
         time.sleep(0.5)
@@ -413,7 +435,7 @@ while game:
     # Verifica se houve colisão entre a bala e o meteoro
     colidiuad = pygame.sprite.groupcollide(all_shurikens, all_antenad, True, True)
     for colisoes in colidiuad:
-        antenad = AntenaD(assets['antenadireita'])
+        antenad = AntenaD(assets['antenadireita'],antenad.speedy)
         all_sprites.add(antenad)
         all_obstacles.add(antenad)
         all_antenad.add(antenad)
@@ -424,7 +446,7 @@ while game:
 
     colidiuae = pygame.sprite.groupcollide(all_shurikens, all_antenae, True, True)
     for colisoes in colidiuae:
-        antenae = AntenaE(assets['antenaesquerda'])
+        antenae = AntenaE(assets['antenaesquerda'],antenae.speedy)
         all_sprites.add(antenae)
         all_obstacles.add(antenae)
         all_antenae.add(antenae)
@@ -434,7 +456,7 @@ while game:
 
     colidiucd = pygame.sprite.groupcollide(all_shurikens, all_canod, True, True)
     for colisoes in colidiucd:
-        cd = CanoD(assets['canodireita'])
+        cd = CanoD(assets['canodireita'],canod.speedy)
         all_sprites.add(cd)
         all_obstacles.add(cd)
         all_canod.add(cd)
@@ -444,7 +466,7 @@ while game:
     
     colidiuce = pygame.sprite.groupcollide(all_shurikens, all_canoe, True, True)
     for colisoes in colidiuce:
-        ce = CanoE(assets['canoesquerda'])
+        ce = CanoE(assets['canoesquerda'],canoe.speedy)
         all_sprites.add(ce)
         all_obstacles.add(ce)
         all_canoe.add(ce)
