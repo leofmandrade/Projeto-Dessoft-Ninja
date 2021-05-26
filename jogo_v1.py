@@ -56,7 +56,7 @@ assets['explosao']= explosao
 # Carrega os sons do jogo
 pygame.mixer.music.load('assets/img/snd/Musica2.ogg')
 pygame.mixer.music.set_volume(0.2)
-shuriken_sound = pygame.mixer.Sound('assets/img/snd/ThrowingShuriken.wav')
+shuriken_sound = pygame.mixer.Sound('assets/img/snd/ShurikenSound2.wav')
 jump_sound = pygame.mixer.Sound('assets/img/snd/JumpSound.wav')
 collision_sound = pygame.mixer.Sound('assets/img/snd/CollisionSound.wav')
 
