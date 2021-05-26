@@ -23,6 +23,8 @@ assets['fundo'] = pygame.image.load('assets/img/FUNDOJOGOFINAL.png').convert()
 assets['paredes'] = pygame.image.load('assets/img/PAREDESFINAL.png')
 assets['placa'] = pygame.image.load('assets/img/PLACA.png')
 #-----Imagens do ninja
+#Logo Ninja
+assets['logoninja'] = pygame.image.load('assets/img/LOGONINJA.png')
 #Ninja andando
 assets['ninjadireita00'] = pygame.image.load('assets/img/NINJAANDANDODIREITA00.png')
 assets['ninjaesquerda00'] = pygame.image.load('assets/img/NINJAANDANDOESQUERDA00.png')
@@ -56,12 +58,18 @@ for i in range(6):
 assets['explosao']= explosao
 
 # Carrega os sons do jogo
-pygame.mixer.music.load('assets/img/snd/Musica2.ogg')
+pygame.mixer.music.load('assets/snd/Musica2.ogg')
 pygame.mixer.music.set_volume(0.2)
-shuriken_sound = pygame.mixer.Sound('assets/img/snd/ShurikenSound2.wav')
-jump_sound = pygame.mixer.Sound('assets/img/snd/JumpSound.wav')
-collision_sound = pygame.mixer.Sound('assets/img/snd/CollisionSound.wav')
+shuriken_sound = pygame.mixer.Sound('assets/snd/ShurikenSound2.wav')
+jump_sound = pygame.mixer.Sound('assets/snd/JumpSound.wav')
+collision_sound = pygame.mixer.Sound('assets/snd/CollisionSound.wav')
 
+#--------Carrega a fonte do placar
+assets['fonteplacar'] = pygame.font.Font('assets/font/game_over.ttf', 100)
+assets['fontemenorpontuacao'] = pygame.font.Font('assets/font/game_over.ttf', 60)
+
+#--------FONTE DAS VIDAS
+assets['score_font'] = pygame.font.Font('assets/font/PressStart2P.ttf', 28)
 # ----- Inicia estruturas de dados
 #------- Definindo novos tipos
 class Ninja(pygame.sprite.Sprite):
@@ -196,24 +204,7 @@ class Cano(pygame.sprite.Sprite):
        # now = pygame.time.get_ticks()
        # elapsed_ticksCANOE = now - self.last_updateCANOE 
 
-'''
-class CanoD(pygame.sprite.Sprite):
-    def __init__(self, img,spd):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = img
-        self.rect = self.image.get_rect()
-        self.rect.x = WIDTH-210
-        self.rect.y = HEIGHT-(random.randint(2000, 3500))
-        self.speedx = 0
-        self.speedy = spd
 
-    def update(self):
-        self.rect.y += self.speedy
-        if self.rect.top > HEIGHT:
-            self.rect.x = WIDTH-210
-            self.rect.y = HEIGHT-(random.randint(2000, 3500))
-            self.speedx = 0
-'''
 #-------------- ANTENAS
 class Antena(pygame.sprite.Sprite):
     def __init__(self, img, spd, lado):
@@ -243,24 +234,7 @@ class Antena(pygame.sprite.Sprite):
             if self.lado == 'esquerdo':
                 self.rect.x = WIDTH-495
                 self.rect.y = HEIGHT-(random.randint(1000, 3500))
-'''
-class AntenaD(pygame.sprite.Sprite):
-    def __init__(self, img, spd):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = img
-        self.rect = self.image.get_rect()
-        self.rect.x = WIDTH-495
-        self.rect.y = HEIGHT-(random.randint(1000, 3500))
-        self.speedx = 0
-        self.speedy = spd
-    
-    def update(self):
-        self.rect.y += self.speedy
-        if self.rect.top > HEIGHT:
-            self.rect.x = WIDTH-495
-            self.rect.y = HEIGHT-(random.randint(1000, 3500))
-            self.speedx = 0
-'''
+
 class Explosao(pygame.sprite.Sprite):
     def __init__(self, center, assets):
         pygame.sprite.Sprite.__init__(self)
@@ -362,8 +336,7 @@ all_canod.add(canod)
 all_canoe.add(canoe)
 
 #adicionando um numero limitado de shurikens
-numeroshurikens= 0
-ticks_0 = 0
+numeroshurikens= 3
 
 #ESTADOS
 DONE = 0
@@ -371,12 +344,19 @@ PLAYING = 1
 DYING = 2
 state = PLAYING
 
+ticks_0 = 0
+ticks_1 = 0
+placar = 0
+vidas = 3
+
 # ===== Loop principal =====
 pygame.mixer.music.play(loops=-1)
 while state != DONE:
     #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
+    if ticks_1 >= 15:
+        placar += 5
+        ticks_1 = 0
     if ticks_0 >= 900:
-
         canoe.speedy += 1
         canoe.rect.y += canoe.speedy
         canoe.speedx = 0
@@ -394,8 +374,9 @@ while state != DONE:
         antenae.speedx = 0
 
         ticks_0 = 0
-        numeroshurikens = 0
-    ticks_0 += 1  
+        numeroshurikens = 3
+    ticks_0 += 1
+    ticks_1 += 1
     
     # ----- Trata eventos
     for event in pygame.event.get():
@@ -418,9 +399,9 @@ while state != DONE:
                 #  player.rect.x = WIDTH-352.5
                 #   player.rect.y = HEIGHT-200
                 if event.key == pygame.K_SPACE:
-                    if numeroshurikens < 3:
+                    if numeroshurikens <= 3 and numeroshurikens > 0:
                         player.shoot()
-                        numeroshurikens += 1
+                        numeroshurikens -= 1
             if event.type == pygame.KEYUP:
                 # Dependendo da tecla, altera a velocidade.
                 if event.key == pygame.K_LEFT:
@@ -438,11 +419,18 @@ while state != DONE:
     #-----Verifica colisão
     if state == PLAYING:
         hits = pygame.sprite.spritecollide(player, all_obstacles, True)
-
         if len(hits) > 0:
             collision_sound.play()
+            player.kill()
             time.sleep(0.5)
             state = DYING
+            vidas -= 1
+            if vidas == 0:
+                state = DONE
+            else:
+                state = PLAYING
+                player = Ninja(groups, assets)
+                all_sprites.add(player)
 
         # Verifica se houve colisão entre os obstáculos e o ninja
         colidiuad = pygame.sprite.groupcollide(all_shurikens, all_antenad, True, True)
@@ -484,8 +472,6 @@ while state != DONE:
 
             explosao = Explosao(colisoes.rect.center, assets)
             all_sprites.add(explosao)
-    elif state == DYING:
-        state = DONE
 
     # ----- Gera saídas
     window.fill((255, 255, 255))  # Preenche com a cor branca)
@@ -493,6 +479,35 @@ while state != DONE:
     window.blit(assets['paredes'], (0,0))
     window.blit(assets['placa'], (0, 0))
     all_sprites.draw(window)
+
+    #---------DESENHANDO O PLACAR
+    text_surface1 = assets['fontemenorpontuacao'].render(('PONTOS:'), True, (255,255,255))
+    text_surface2 = assets['fonteplacar'].render("{:04d}".format(placar), True, (255, 255, 255))
+    text_rect1 = text_surface1.get_rect()
+    text_rect2 = text_surface2.get_rect()
+    text_rect1.topleft = (HEIGHT - 255, HEIGHT - 750)
+    text_rect2.topleft = (HEIGHT - 253, HEIGHT - 725)
+    window.blit(text_surface1, text_rect1)
+    window.blit(text_surface2, text_rect2)
+
+    #----------DESENHANDO AS VIDAS
+    text_surface = assets['score_font'].render(chr(9829) * vidas, True, (255, 0, 0))
+    text_rect = text_surface.get_rect()
+    text_rect.bottomleft = (10, HEIGHT - 10)
+    window.blit(text_surface, text_rect)
+
+    #----------DESENHANDO A KUNAI
+    kunai = assets['shuriken']
+    kunai_rect = kunai.get_rect()
+    kunai_rect.bottomleft = (25, HEIGHT - 60)
+    qtdkunais = assets['fontemenorpontuacao'].render("= {}".format(numeroshurikens), True, (255, 255, 255))
+    qtdkunais_rect = qtdkunais.get_rect()
+    qtdkunais_rect.bottomleft = (50, HEIGHT - 70)
+    window.blit(kunai, kunai_rect)
+    window.blit(qtdkunais, qtdkunais_rect)
+
+    window.blit(text_surface1, text_rect1)
+    window.blit(text_surface2, text_rect2)
 
     # ----- Atualiza estado do jogo
     pygame.display.update()  # Mostra o novo frame para o jogador
