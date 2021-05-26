@@ -374,13 +374,13 @@ while game:
             if event.key == pygame.K_LEFT:
                 if player.lado == 'direita':
                     player.move('esquerda')
-                jump_sound.play()
+                    jump_sound.play()
                # player.rect.x = WIDTH-352.5
               #  player.rect.y = HEIGHT-200
             if event.key == pygame.K_RIGHT:
                 if player.lado == 'esquerda':
                     player.move('direita')
-                jump_sound.play()
+                    jump_sound.play()
               #  player.rect.x = WIDTH-352.5
               #   player.rect.y = HEIGHT-200
             if event.key == pygame.K_SPACE:
