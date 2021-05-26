@@ -359,11 +359,10 @@ while game:
         antenae.rect.y += antenae.speedy
         antenae.speedx = 0
         print(antenae.speedy)
+        print('####')
         ticks_0 = 0
-
+        numeroshurikens = 0
     ticks_0 += 1  
-    numeroshurikens = 0
-    ticks_0 += 1
     
     # ----- Trata eventos
     for event in pygame.event.get():
@@ -385,7 +384,7 @@ while game:
               #  player.rect.x = WIDTH-352.5
               #   player.rect.y = HEIGHT-200
             if event.key == pygame.K_SPACE:
-                if numeroshurikens < 20000:
+                if numeroshurikens < 3:
                     player.shoot()
                     numeroshurikens += 1
         if event.type == pygame.KEYUP:
