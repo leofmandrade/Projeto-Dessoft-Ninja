@@ -368,27 +368,27 @@ while game:
     print(antenae.speedy)
     print('####')
 
-    if ticks_0 >= 100:
+    if ticks_0 >= 500:
 
-        canoe.speedy += 3
+        canoe.speedy += 1
         canoe.rect.y += canoe.speedy
         canoe.speedx = 0
         
 
 
-        canod.speedy += 3
+        canod.speedy += 1
         canod.rect.y += canod.speedy
         canod.speedx = 0
         
 
 
-        antenad.speedy += 3
+        antenad.speedy += 1
         antenad.rect.y += antenad.speedy
         antenad.speedx = 0
         
 
 
-        antenae.speedy += 3
+        antenae.speedy += 1
         antenae.rect.y += antenae.speedy
         antenae.speedx = 0
 
