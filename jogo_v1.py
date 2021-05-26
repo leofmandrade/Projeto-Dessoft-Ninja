@@ -163,24 +163,37 @@ class Shuriken(pygame.sprite.Sprite):
             self.kill()  
         self.shuriken_sound.play()   
             
-class CanoE(pygame.sprite.Sprite):
-    def __init__(self, img, spd):
+class Cano(pygame.sprite.Sprite):
+    def __init__(self, img, spd,lado):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = WIDTH-495
-        self.rect.y = HEIGHT-(random.randint(1000, 3500))
         self.speedx = 0
         self.speedy = spd
+        self.lado = lado
+        if self.lado == "esquerdo":
+            self.rect.x = WIDTH-495
+            self.rect.y = HEIGHT-(random.randint(1000, 3500))
+
+        elif self.lado == "direito":
+            self.rect.x = WIDTH-210
+            self.rect.y = HEIGHT-(random.randint(2000, 3500))
+
        # self.frame_ticksCANOE = 10000
        # self.last_updateCANOE = pygame.time.get_ticks()
     
     def update(self):
         self.rect.y += self.speedy
-        if self.rect.top > HEIGHT:
-            self.rect.x = WIDTH-495
-            self.rect.y = HEIGHT-(random.randint(1000, 3500))
+    
+        if self.rect.top > HEIGHT:           
             self.speedx = 0
+            if self.lado == "esquerdo":
+                self.rect.x = WIDTH-495
+                self.rect.y = HEIGHT-(random.randint(1000, 3500))
+            elif self.lado =="direito":
+                self.rect.x = WIDTH-210
+                self.rect.y = HEIGHT-(random.randint(2000, 3500))
+
        # now = pygame.time.get_ticks()
        # elapsed_ticksCANOE = now - self.last_updateCANOE 
 
@@ -312,8 +325,8 @@ spdcanod = 7
 spdantenae = 7
 spdantenad = 7
 #----CANOS (POR CLASS)
-canoe = CanoE(assets['canoesquerda'],spdcanoe)
-canod = CanoD(assets['canodireita'],spdcanod)
+canoe = Cano(assets['canoesquerda'],spdcanoe, 'esquerdo')
+canod = Cano(assets['canodireita'],spdcanod, 'direito')
 
 #----ANTENA (POR CLASS)
 antenae = AntenaE(assets['antenaesquerda'],spdantenae)
@@ -354,7 +367,7 @@ while game:
     print('antenae.speedy')
     print(antenae.speedy)
     print('####')
-    
+
     if ticks_0 >= 100:
 
         canoe.speedy += 3
@@ -456,7 +469,7 @@ while game:
 
     colidiucd = pygame.sprite.groupcollide(all_shurikens, all_canod, True, True)
     for colisoes in colidiucd:
-        cd = CanoD(assets['canodireita'],canod.speedy)
+        cd = Cano(assets['canodireita'],canoe.speedy,'direito')
         all_sprites.add(cd)
         all_obstacles.add(cd)
         all_canod.add(cd)
@@ -466,7 +479,7 @@ while game:
     
     colidiuce = pygame.sprite.groupcollide(all_shurikens, all_canoe, True, True)
     for colisoes in colidiuce:
-        ce = CanoE(assets['canoesquerda'],canoe.speedy)
+        ce = Cano(assets['canoesquerda'],canoe.speedy, 'esquerdo')
         all_sprites.add(ce)
         all_obstacles.add(ce)
         all_canoe.add(ce)
