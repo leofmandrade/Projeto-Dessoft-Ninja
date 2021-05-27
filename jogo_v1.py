@@ -5,7 +5,6 @@ import pygame
 import random
 import time
 from pygame.constants import KEYDOWN
-from sympy import SparseNDimArray
 pygame.init()
 pygame.mixer.init()
 
@@ -44,6 +43,7 @@ assets['canoesquerda']= pygame.image.load('assets/img/CANOESQUERDA.png')
 assets['canodireita']= pygame.image.load('assets/img/CANODIREITA.png')
 assets['antenaesquerda']= pygame.image.load('assets/img/ANTENAESQUERDA.png')
 assets['antenadireita']= pygame.image.load('assets/img/ANTENADIREITA.png')
+
 #-----Imagem do projétil
 assets['shuriken']= pygame.image.load('assets/img/SHURIKEN.png')
 
@@ -107,6 +107,7 @@ class Ninja(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         if self.rect.x > WIDTH:
             self.rect.x = 200
+
         if self.lado == 'direita':
             self.rect.x = WIDTH-210 #posicao na direita
             self.rect.y = HEIGHT-150 ###############
@@ -134,6 +135,7 @@ class Ninja(pygame.sprite.Sprite):
             player.rect.x = WIDTH-352.5
             player.rect.y = HEIGHT-200
             self.lado = 'esquerda'
+
         if self.lado == 'meioesquerda':
             self.image = assets['ninjapulandod02']
             player.rect.x = WIDTH-352.5
@@ -171,7 +173,7 @@ class Shuriken(pygame.sprite.Sprite):
 
 #------------------ CANOS        
 class Cano(pygame.sprite.Sprite):
-    def __init__(self, img, spd,lado):
+    def __init__(self, img, spd, lado):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
@@ -223,7 +225,6 @@ class Antena(pygame.sprite.Sprite):
             self.rect.x = WIDTH-210
             self.rect.y = HEIGHT-(random.randint(1000, 3500))
 
-    
     def update(self):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT:
@@ -346,6 +347,7 @@ state = PLAYING
 
 ticks_0 = 0
 ticks_1 = 0
+ticks_2 = 0
 placar = 0
 vidas = 3
 
@@ -353,10 +355,15 @@ vidas = 3
 pygame.mixer.music.play(loops=-1)
 while state != DONE:
     #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
+    if ticks_2 >= 900:
+        numeroshurikens = 3
+        ticks_2 = 0
+
     if ticks_1 >= 15:
         placar += 5
         ticks_1 = 0
-    if ticks_0 >= 900:
+    
+    if ticks_0 >= 600:
         canoe.speedy += 1
         canoe.rect.y += canoe.speedy
         canoe.speedx = 0
@@ -374,9 +381,10 @@ while state != DONE:
         antenae.speedx = 0
 
         ticks_0 = 0
-        numeroshurikens = 3
+        
     ticks_0 += 1
     ticks_1 += 1
+    ticks_2 += 1
     
     # ----- Trata eventos
     for event in pygame.event.get():
