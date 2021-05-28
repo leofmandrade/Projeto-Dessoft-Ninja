@@ -21,6 +21,9 @@ assets = {}
 assets['fundo'] = pygame.image.load('assets/img/FUNDOJOGOFINAL.png').convert()
 assets['paredes'] = pygame.image.load('assets/img/PAREDESFINAL.png')
 assets['placa'] = pygame.image.load('assets/img/PLACA.png')
+assets['telainicial'] = pygame.image.load('assets/img/TELAINICIAL.png')
+assets['instrucoes'] = pygame.image.load('assets/img/PAGINAINSTRUCOES.png')
+assets['telafinal'] = pygame.image.load('assets/img/GAMEOVER.png')
 #-----Imagens do ninja
 #Logo Ninja
 assets['logoninja'] = pygame.image.load('assets/img/LOGONINJA.png')
