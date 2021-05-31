@@ -7,27 +7,6 @@ from assets import load_assets, BACKGROUND, SCORE_FONT, PAREDES, PLACA, NINJADIR
 
 assets = load_assets()
 
-groups = {}
-all_sprites = pygame.sprite.Group()
-    #obstaculos
-all_obstacles = pygame.sprite.Group()
-    #shurikens
-all_shurikens = pygame.sprite.Group()
-    #grupo para cada obstaculo individual
-all_antenae = pygame.sprite.Group()
-all_antenad = pygame.sprite.Group()
-all_canoe = pygame.sprite.Group()
-all_canod = pygame.sprite.Group()
-
-    #adicionando no dicionario
-groups['all_sprites']=all_sprites
-groups['all_obstacles']=all_obstacles
-groups['all_shurikens'] = all_shurikens
-groups['all_antenae'] = all_antenae
-groups['all_antenad'] = all_antenad
-groups['all_canoe'] = all_canoe
-groups['all_canod'] = all_canod
-
 class Ninja(pygame.sprite.Sprite):
     def __init__(self, groups, assets):
         pygame.sprite.Sprite.__init__(self)
@@ -40,8 +19,6 @@ class Ninja(pygame.sprite.Sprite):
         self.lado = 'direita'
         self.groups = groups
         self.assets = assets
-        self.all_sprites = all_sprites
-        self.all_shurikens = all_shurikens
         self.shuriken = assets['shuriken']
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
@@ -99,14 +76,10 @@ class Ninja(pygame.sprite.Sprite):
 
     def shoot(self):
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
-        shuriken = Shuriken(self.shuriken, self.rect.top, self.rect.centerx, assets['shuriken_sound'])
-        self.all_sprites.add(shuriken)
-        self.all_shurikens.add(shuriken)
-
-
+        return Shuriken(self.rect.top, self.rect.centerx, assets['shuriken_sound'])
 
 class Shuriken(pygame.sprite.Sprite):
-    def __init__(self, img, bottom, centerx, shuriken_sound):
+    def __init__(self, bottom, centerx, shuriken_sound):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
