@@ -346,10 +346,7 @@ numeroshurikens= 3
 DONE = 0
 PLAYING = 1
 DYING = 2
-INITIAL = 3
-FINISH = 4
-INSTRUCTIONS = 5
-state = INITIAL
+state = PLAYING
 
 ticks_0 = 0
 ticks_1 = 0
@@ -425,8 +422,6 @@ while state != DONE:
                     if event.key == pygame.K_RIGHT:
                         player.rect.x = WIDTH-210
                         player.rect.y = HEIGHT-150
-                if event.type == pygame.K_s:
-                    start = True
                     
             # ----- Atualiza estado do jogo
         # ----- Atualiza estado do jogo
@@ -529,12 +524,5 @@ while state != DONE:
 
         # ----- Atualiza estado do jogo
         pygame.display.update()  # Mostra o novo frame para o jogador
-    if state == INITIAL:
-        pass
-    if state == FINISH:
-        pass
-    if state == INSTRUCTIONS:
-        pass    
-
 # ===== Finalização =====
 pygame.quit()  # Função do PyGame que finaliza os recursos utilizados

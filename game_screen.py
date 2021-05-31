@@ -84,10 +84,11 @@ def game_screen(window):
     vidas = 3
     speed = 1
 
+    pygame.mixer.music.play(loops=-1)
     # ===== Loop principal =====
+    
     while game:
         if state == PLAYING:
-            pygame.mixer.music.play(loops=-1)
             clock.tick(FPS)
             #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
             if ticks_2 >= 900:
@@ -252,24 +253,34 @@ def game_screen(window):
                     window.blit(text_surface2, text_rect2)
 
                     # ----- Atualiza estado do jogo
-                    
-                if state == INITIAL:
-                    window.fill((255, 255, 255))  # Preenche com a cor branca)
-                    window.blit(assets['telainicial'], (0, 0))
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_a:
-                            state == INSTRUCTIONS
-                if state == FINISH:
-                    window.fill((255, 255, 255))  # Preenche com a cor branca)
-                    window.blit(assets['telafinal'], (0, 0))
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_a:
-                            game = False
-                if state == INSTRUCTIONS:
-                    window.fill((255, 255, 255))  # Preenche com a cor branca)
-                    window.blit(assets['instrucoes'], (0, 0))
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_a:
-                            state == PLAYING
-                #Mostra o novo frame pro jogador
-                pygame.display.update()
+            pygame.display.update()
+        if state == INITIAL:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game = False
+                window.fill((255, 255, 255))  # Preenche com a cor branca)
+                window.blit(assets['telainicial'], (0, 0))
+
+        if state == INSTRUCTIONS:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game = False
+                window.fill((255, 255, 255))  # Preenche com a cor branca)
+                window.blit(assets['instrucoes'], (0, 0))
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_a:
+                        state == PLAYING
+            pygame.display.update()
+        if state == FINISH:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game = False
+                window.fill((255, 255, 255))  # Preenche com a cor branca)
+                window.blit(assets['telafinal'], (0, 0))
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_a:
+                        game = False
+            pygame.display.update()
+        #Mostra o novo frame pro jogador
+        pygame.display.update()
+        
