@@ -29,10 +29,14 @@ COLLISION_SOUND = 'collision_sound'
 pygame.init()
 
 def load_assets():
+    #------Imagens do fundo
     assets = {}
-    assets['fundo'] = pygame.image.load(os.path.join(IMG_DIR, 'FUNDOJOGOFINAL.png'))
-    assets['paredes'] = pygame.image.load(os.path.join(IMG_DIR,'PAREDESFINAL.png'))
-    assets['placa'] = pygame.image.load(os.path.join(IMG_DIR, 'PLACA.png'))
+    assets['fundo'] = pygame.image.load('assets/img/FUNDOJOGOFINAL.png')
+    assets['paredes'] = pygame.image.load('assets/img/PAREDESFINAL.png')
+    assets['placa'] = pygame.image.load('assets/img/PLACA.png')
+    assets['telainicial'] = pygame.image.load('assets/img/TELAINICIAL.png')
+    assets['instrucoes'] = pygame.image.load('assets/img/PAGINAINSTRUCOES.png')
+    assets['telafinal'] = pygame.image.load('assets/img/GAMEOVER.png')
     #-----Imagens do ninja
     #Logo Ninja
     assets['logoninja'] = pygame.image.load(os.path.join(IMG_DIR,'LOGONINJA.png'))
