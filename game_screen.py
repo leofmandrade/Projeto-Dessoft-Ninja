@@ -1,3 +1,4 @@
+from random import randint
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED
 from assets import load_assets, BACKGROUND, SCORE_FONT, PAREDES, PLACA, NINJADIREITA00, NINJADIREITA01, NINJAESQUERDA00, NINJAESQUERDA01, NINJAPULANDOD02, NINJAPULANDOE02, CANODIREITA, CANOESQUERDA, ANTENADIREITA, ANTENAESQUERDA, SHURIKEN, EXPLOSAO, FONTEMENORPUNTUACAO, FONTEPLACAR, MUSIC, SHURIKEN_SOUND, JUMP_SOUND, COLLISION_SOUND
@@ -31,39 +32,12 @@ def game_screen(window):
     groups['all_sprites']=all_sprites
     groups['all_obstacles']=all_obstacles
     groups['all_shurikens'] = all_shurikens
-    groups['all_antenae'] = all_antenae
-    groups['all_antenad'] = all_antenad
-    groups['all_canoe'] = all_canoe
-    groups['all_canod'] = all_canod
 
     #criando o jogador
     player = Ninja(groups, assets)
 
-    #variaveis iniciais velocidade
-    spd = 7
-
-    #----CANOS (POR CLASS)
-    canoe = Cano(assets['canoesquerda'], spd, 'esquerdo')
-    canod = Cano(assets['canodireita'], spd, 'direito')
-
-    #----ANTENA (POR CLASS)
-    antenae = Antena(assets['antenadireita'], spd, 'esquerdo')
-    antenad = Antena(assets['antenaesquerda'], spd, 'direito')
-
     #adicionando tudo num grupo só
     all_sprites.add(player)
-
-    #adicionando os obstaculos num grupo
-    all_obstacles.add(canoe)
-    all_obstacles.add(canod)
-    all_obstacles.add(antenad)
-    all_obstacles.add(antenae)
-
-    #adicionando cada obstaculo no seu grupo
-    all_antenad.add(antenad)
-    all_antenae.add(antenae)
-    all_canod.add(canod)
-    all_canoe.add(canoe)
 
     #adicionando um numero limitado de shurikens
     numeroshurikens= 3
@@ -82,13 +56,12 @@ def game_screen(window):
 
     placar = 0
     vidas = 3
-    speed = 1
+    speedy = 7
 
     pygame.mixer.music.play(loops=-1)
     # ===== Loop principal =====
     
     while game:
-        #print(state)
         if state == PLAYING:
             clock.tick(FPS)
             #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
@@ -101,23 +74,10 @@ def game_screen(window):
                 ticks_1 = 0
             
             if ticks_0 >= 600:
-                canoe.speedy += 1
-                canoe.rect.y += speed
-                canoe.speedx = 0
-                
-                canod.speedy += 1
-                canod.rect.y += speed
-                canod.speedx = 0
-
-                antenad.speedy += 1
-                antenad.rect.y += speed
-                antenad.speedx = 0
-                
-                antenae.speedy += 1
-                antenae.rect.y += speed
-                antenae.speedx = 0
-
-                all_obstacles.update(antenae.speedy)
+                speedy += 3
+                for obs in all_obstacles:
+                    obs.speedy = speedy
+                print(speedy)
                 ticks_0 = 0
                 
             ticks_0 += 1
@@ -161,113 +121,97 @@ def game_screen(window):
                                 
                         # ----- Atualiza estado do jogo
                     # ----- Atualiza estado do jogo
-                    # Atualizando a posição do objeto
-                    all_sprites.update()
-                    all_obstacles.update(canoe.speedy)
+            # Atualizando a posição do objeto
+            all_sprites.update()
 
-                    #-----Verifica colisão
-                    if state == PLAYING:
-                        hits = pygame.sprite.spritecollide(player, all_obstacles, True)
-                        if len(hits) > 0:
-                            assets['collision_sound'].play()
-                            player.kill()
-                            vidas -= 1
-                            if vidas == 0:
-                                state = FINISH
-                            else:
-                                all_obstacles.empty()
-                                state = PLAYING
-                                player = Ninja(groups, assets)
-                                all_sprites.add(player)
+           # all_obstacles.update(canoe.speedy)
+            
+            while len(all_obstacles)<=2:
+                opc = randint(1,4)
+                if opc == 1:
+                    obs = Cano(assets['canoesquerda'], speedy , 'esquerdo')
+                elif opc == 2:
+                    obs = Cano(assets['canodireita'], speedy, 'direito')
+                elif opc == 3:
+                    obs = Antena(assets['antenadireita'], speedy, 'esquerdo')
+                else: 
+                    obs = Antena(assets['antenaesquerda'], speedy, 'direito')
 
-                        # Verifica se houve colisão entre os obstáculos e o ninja
-                        colidiuad = pygame.sprite.groupcollide(all_shurikens, all_antenad, True, True)
-                        for colisoes in colidiuad:
-                            antenad = Antena(assets['antenaesquerda'],antenad.speedy,'direito')
-                            all_obstacles.add(antenad)
-                            all_antenad.add(antenad)
+                all_obstacles.add(obs)
+                all_sprites.add(obs)
 
-                            explosao = Explosao(colisoes.rect.center, assets)
-                            all_sprites.add(explosao)
+            #-----Verifica colisão
+            if state == PLAYING:
+                hits = pygame.sprite.spritecollide(player, all_obstacles, True)
+                if len(hits) > 0:
+                    assets['collision_sound'].play()
+                    player.kill()
+                    vidas -= 1
+                    if vidas == 0:
+                        state = FINISH
+                    else:
+                        #all_obstacles.empty()
+                        for obs in all_obstacles:
+                            obs.kill()
+                        state = PLAYING
+                        player = Ninja(groups, assets)
+                        all_sprites.add(player)
 
-                        colidiuae = pygame.sprite.groupcollide(all_shurikens, all_antenae, True, True)
-                        for colisoes in colidiuae:
-                            antenae = Antena(assets['antenadireita'],antenae.speedy,'esquerdo')
-                            all_obstacles.add(antenae)
-                            all_antenae.add(antenae)
+                # Verifica se houve colisão entre os obstáculos e o ninja
+                colidiuad = pygame.sprite.groupcollide(all_shurikens, all_obstacles, True, True)
+                for colisoes in colidiuad:
+                    explosao = Explosao(colisoes.rect.center, assets)
+                    all_sprites.add(explosao)
+            
+            # ----- Gera saídas
+            window.fill((255, 255, 255))  # Preenche com a cor branca)
+            window.blit(assets['fundo'], (0, 0))
+            window.blit(assets['paredes'], (0,0))
+            window.blit(assets['placa'], (0, 0))
+            all_sprites.draw(window)
+            all_obstacles.draw(window)
 
-                            explosao = Explosao(colisoes.rect.center, assets)
-                            all_sprites.add(explosao)
+            #---------DESENHANDO O PLACAR
+            text_surface1 = assets['fontemenorpontuacao'].render(('PONTOS:'), True, (255,255,255))
+            text_surface2 = assets['fonteplacar'].render("{:04d}".format(placar), True, (255, 255, 255))
+            text_rect1 = text_surface1.get_rect()
+            text_rect2 = text_surface2.get_rect()
+            text_rect1.topleft = (HEIGHT - 255, HEIGHT - 750)
+            text_rect2.topleft = (HEIGHT - 253, HEIGHT - 725)
+            window.blit(text_surface1, text_rect1)
+            window.blit(text_surface2, text_rect2)
 
-                        colidiucd = pygame.sprite.groupcollide(all_shurikens, all_canod, True, True)
-                        for colisoes in colidiucd:
-                            cd = Cano(assets['canodireita'],canoe.speedy,'direito')
-                            all_obstacles.add(cd)
-                            all_canod.add(cd)
+            #----------DESENHANDO AS VIDAS
+            text_surface = assets['score_font'].render(chr(9829) * vidas, True, (255, 0, 0))
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = (10, HEIGHT - 10)
+            window.blit(text_surface, text_rect)
 
-                            explosao = Explosao(colisoes.rect.center, assets)
-                            all_sprites.add(explosao)
-                        
-                        colidiuce = pygame.sprite.groupcollide(all_shurikens, all_canoe, True, True)
-                        for colisoes in colidiuce:
-                            ce = Cano(assets['canoesquerda'],canoe.speedy, 'esquerdo')
-                            all_obstacles.add(ce)
-                            all_canoe.add(ce)
+            #----------DESENHANDO A KUNAI
+            kunai = assets['shuriken']
+            kunai_rect = kunai.get_rect()
+            kunai_rect.bottomleft = (25, HEIGHT - 60)
+            qtdkunais = assets['fontemenorpontuacao'].render("= {}".format(numeroshurikens), True, (255, 255, 255))
+            qtdkunais_rect = qtdkunais.get_rect()
+            qtdkunais_rect.bottomleft = (50, HEIGHT - 70)
+            window.blit(kunai, kunai_rect)
+            window.blit(qtdkunais, qtdkunais_rect)
 
-                            explosao = Explosao(colisoes.rect.center, assets)
-                            all_sprites.add(explosao)
-
-                    # ----- Gera saídas
-                    window.fill((255, 255, 255))  # Preenche com a cor branca)
-                    window.blit(assets['fundo'], (0, 0))
-                    window.blit(assets['paredes'], (0,0))
-                    window.blit(assets['placa'], (0, 0))
-                    all_sprites.draw(window)
-                    all_obstacles.draw(window)
-
-                    #---------DESENHANDO O PLACAR
-                    text_surface1 = assets['fontemenorpontuacao'].render(('PONTOS:'), True, (255,255,255))
-                    text_surface2 = assets['fonteplacar'].render("{:04d}".format(placar), True, (255, 255, 255))
-                    text_rect1 = text_surface1.get_rect()
-                    text_rect2 = text_surface2.get_rect()
-                    text_rect1.topleft = (HEIGHT - 255, HEIGHT - 750)
-                    text_rect2.topleft = (HEIGHT - 253, HEIGHT - 725)
-                    window.blit(text_surface1, text_rect1)
-                    window.blit(text_surface2, text_rect2)
-
-                    #----------DESENHANDO AS VIDAS
-                    text_surface = assets['score_font'].render(chr(9829) * vidas, True, (255, 0, 0))
-                    text_rect = text_surface.get_rect()
-                    text_rect.bottomleft = (10, HEIGHT - 10)
-                    window.blit(text_surface, text_rect)
-
-                    #----------DESENHANDO A KUNAI
-                    kunai = assets['shuriken']
-                    kunai_rect = kunai.get_rect()
-                    kunai_rect.bottomleft = (25, HEIGHT - 60)
-                    qtdkunais = assets['fontemenorpontuacao'].render("= {}".format(numeroshurikens), True, (255, 255, 255))
-                    qtdkunais_rect = qtdkunais.get_rect()
-                    qtdkunais_rect.bottomleft = (50, HEIGHT - 70)
-                    window.blit(kunai, kunai_rect)
-                    window.blit(qtdkunais, qtdkunais_rect)
-
-                    window.blit(text_surface1, text_rect1)
-                    window.blit(text_surface2, text_rect2)
-            pygame.display.update()
+            window.blit(text_surface1, text_rect1)
+            window.blit(text_surface2, text_rect2)
                     # ----- Atualiza estado do jogo
   
-        elif state == INITIAL:
+        if state == INITIAL:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game = False
                 #print('estado: {}'.format(state))
                 window.fill((255, 255, 255))  # Preenche com a cor branca)
                 window.blit(assets['telainicial'], (0, 0))
-                if event.type == pygame.KEYUP:
+                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
                         state = INSTRUCTIONS
                         #print('a')
-            pygame.display.update()
 
         elif state == INSTRUCTIONS:
             for event in pygame.event.get():
@@ -275,10 +219,9 @@ def game_screen(window):
                     game = False
                 window.fill((255, 255, 255))  # Preenche com a cor branca)
                 window.blit(assets['instrucoes'], (0, 0))
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_s:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_a:
                         state = PLAYING
-            pygame.display.update()
 
         elif state == FINISH:
             for event in pygame.event.get():
@@ -286,10 +229,9 @@ def game_screen(window):
                     game = False
                 window.fill((255, 255, 255))  # Preenche com a cor branca)
                 window.blit(assets['telafinal'], (0, 0))
-                if event.type == pygame.KEYUP:
+                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
                         game = False
-            pygame.display.update()
 
         #Mostra o novo frame pro jogador
         pygame.display.update()

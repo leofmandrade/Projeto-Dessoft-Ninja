@@ -120,18 +120,11 @@ class Cano(pygame.sprite.Sprite):
        # self.frame_ticksCANOE = 10000
        # self.last_updateCANOE = pygame.time.get_ticks()
     
-    def update(self, spd):
+    def update(self):
         self.rect.y += self.speedy
-        self.speedy = spd
 
         if self.rect.top > HEIGHT:           
-            self.speedx = 0
-            if self.lado == "esquerdo":
-                self.rect.x = WIDTH-495
-                self.rect.y = HEIGHT-(random.randint(1000, 3500))
-            elif self.lado =="direito":
-                self.rect.x = WIDTH-210
-                self.rect.y = HEIGHT-(random.randint(2000, 3500))
+            self.kill()
 
        # now = pygame.time.get_ticks()
        # elapsed_ticksCANOE = now - self.last_updateCANOE 
@@ -155,18 +148,11 @@ class Antena(pygame.sprite.Sprite):
             self.rect.x = WIDTH-210
             self.rect.y = HEIGHT-(random.randint(1000, 3500))
 
-    def update(self, spd):
+    def update(self):
         self.rect.y += self.speedy
-        self.speedy = spd
 
         if self.rect.top > HEIGHT:
-            self.speedx = 0
-            if self.lado == 'direito':
-                self.rect.x = WIDTH-210
-                self.rect.y = HEIGHT-(random.randint(2000, 3500))
-            if self.lado == 'esquerdo':
-                self.rect.x = WIDTH-495
-                self.rect.y = HEIGHT-(random.randint(1000, 3500))
+            self.kill()
 
 class Explosao(pygame.sprite.Sprite):
     def __init__(self, center, assets):

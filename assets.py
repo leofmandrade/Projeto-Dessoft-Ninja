@@ -25,6 +25,7 @@ MUSIC = 'music'
 SHURIKEN_SOUND = 'shuriken_sound'
 JUMP_SOUND= 'jump_sound'
 COLLISION_SOUND = 'collision_sound'
+NINJAINVENCIVELDIREITA = 'ninjainvenciveldireita'
 
 pygame.init()
 
@@ -45,6 +46,7 @@ def load_assets():
     assets['ninjaesquerda00'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAANDANDOESQUERDA00.png'))
     assets['ninjadireita01'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAANDANDODIREITA01.png'))
     assets['ninjaesquerda01'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAANDANDOESQUERDA01.png'))
+    assets['ninjainvencivel'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAINVENCIVELDIREITA.png'))
 
     #Ninja Pulando
     assets['ninjapulandod02'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAPULANDODIREITA02.png'))
