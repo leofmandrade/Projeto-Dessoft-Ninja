@@ -88,6 +88,7 @@ def game_screen(window):
     # ===== Loop principal =====
     
     while game:
+        #print(state)
         if state == PLAYING:
             clock.tick(FPS)
             #AUMENTANDO PROGRESSIVAMENTE A VELOCIDADE
@@ -174,6 +175,7 @@ def game_screen(window):
                             if vidas == 0:
                                 state = FINISH
                             else:
+                                all_obstacles.empty()
                                 state = PLAYING
                                 player = Ninja(groups, assets)
                                 all_sprites.add(player)
@@ -251,27 +253,34 @@ def game_screen(window):
 
                     window.blit(text_surface1, text_rect1)
                     window.blit(text_surface2, text_rect2)
-
-                    # ----- Atualiza estado do jogo
             pygame.display.update()
-        if state == INITIAL:
+                    # ----- Atualiza estado do jogo
+  
+        elif state == INITIAL:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game = False
+                #print('estado: {}'.format(state))
                 window.fill((255, 255, 255))  # Preenche com a cor branca)
                 window.blit(assets['telainicial'], (0, 0))
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_a:
+                        state = INSTRUCTIONS
+                        #print('a')
+            pygame.display.update()
 
-        if state == INSTRUCTIONS:
+        elif state == INSTRUCTIONS:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game = False
                 window.fill((255, 255, 255))  # Preenche com a cor branca)
                 window.blit(assets['instrucoes'], (0, 0))
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_a:
-                        state == PLAYING
+                    if event.key == pygame.K_s:
+                        state = PLAYING
             pygame.display.update()
-        if state == FINISH:
+
+        elif state == FINISH:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game = False
@@ -281,6 +290,7 @@ def game_screen(window):
                     if event.key == pygame.K_a:
                         game = False
             pygame.display.update()
+
         #Mostra o novo frame pro jogador
         pygame.display.update()
         
