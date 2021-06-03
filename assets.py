@@ -26,6 +26,7 @@ SHURIKEN_SOUND = 'shuriken_sound'
 JUMP_SOUND= 'jump_sound'
 COLLISION_SOUND = 'collision_sound'
 NINJAINVENCIVELDIREITA = 'ninjainvenciveldireita'
+WATAH_SOUND = 'watah_sound'
 
 pygame.init()
 
@@ -80,6 +81,7 @@ def load_assets():
     assets['shuriken_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'ShurikenSound2.wav'))
     assets['jump_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'JumpSound.wav'))
     assets['collision_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'CollisionSound.wav'))
+    assets['watah_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'Watah.wav'))
 
     #--------Carrega a fonte do placar
     assets['fonteplacar'] = pygame.font.Font(os.path.join(FNT_DIR,'game_over.ttf'), 100)

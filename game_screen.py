@@ -1,7 +1,7 @@
 from random import randint
 import pygame
 from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED
-from assets import load_assets, BACKGROUND, SCORE_FONT, PAREDES, PLACA, NINJADIREITA00, NINJADIREITA01, NINJAESQUERDA00, NINJAESQUERDA01, NINJAPULANDOD02, NINJAPULANDOE02, CANODIREITA, CANOESQUERDA, ANTENADIREITA, ANTENAESQUERDA, SHURIKEN, EXPLOSAO, FONTEMENORPUNTUACAO, FONTEPLACAR, MUSIC, SHURIKEN_SOUND, JUMP_SOUND, COLLISION_SOUND
+from assets import load_assets, BACKGROUND, SCORE_FONT, PAREDES, PLACA, NINJADIREITA00, NINJADIREITA01, NINJAESQUERDA00, NINJAESQUERDA01, NINJAPULANDOD02, NINJAPULANDOE02, CANODIREITA, CANOESQUERDA, ANTENADIREITA, ANTENAESQUERDA, SHURIKEN, EXPLOSAO, FONTEMENORPUNTUACAO, FONTEPLACAR, MUSIC, SHURIKEN_SOUND, JUMP_SOUND, COLLISION_SOUND, WATAH_SOUND
 from sprites import Ninja, Cano, Antena, Explosao, Shuriken
 pygame.init()
 
@@ -210,6 +210,7 @@ def game_screen(window):
                 window.blit(assets['telainicial'], (0, 0))
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
+                        assets['watah_sound'].play()
                         state = INSTRUCTIONS
                         #print('a')
 
@@ -221,6 +222,7 @@ def game_screen(window):
                 window.blit(assets['instrucoes'], (0, 0))
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
+                        assets['watah_sound'].play()
                         state = PLAYING
 
         elif state == FINISH:
