@@ -1,7 +1,7 @@
 from random import randint
 import pygame
-from config import FPS, WIDTH, HEIGHT, BLACK, YELLOW, RED
-from assets import load_assets, BACKGROUND, SCORE_FONT, PAREDES, PLACA, NINJADIREITA00, NINJADIREITA01, NINJAESQUERDA00, NINJAESQUERDA01, NINJAPULANDOD02, NINJAPULANDOE02, CANODIREITA, CANOESQUERDA, ANTENADIREITA, ANTENAESQUERDA, SHURIKEN, EXPLOSAO, FONTEMENORPUNTUACAO, FONTEPLACAR, MUSIC, SHURIKEN_SOUND, JUMP_SOUND, COLLISION_SOUND, WATAH_SOUND
+from config import WIDTH, HEIGHT, BLACK, YELLOW, RED
+from assets import load_assets
 from sprites import Ninja, Cano, Antena, Explosao, Shuriken
 pygame.init()
 
@@ -22,11 +22,6 @@ def game_screen(window):
     all_obstacles = pygame.sprite.Group()
     #shurikens
     all_shurikens = pygame.sprite.Group()
-    #grupo para cada obstaculo individual
-    all_antenae = pygame.sprite.Group()
-    all_antenad = pygame.sprite.Group()
-    all_canoe = pygame.sprite.Group()
-    all_canod = pygame.sprite.Group()
 
     #adicionando no dicionario
     groups['all_sprites']=all_sprites
@@ -234,6 +229,15 @@ def game_screen(window):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
                         game = False
+                    if event.key == pygame.K_r:
+                        state = INSTRUCTIONS
+                        for obs in all_obstacles:
+                            obs.kill()
+                        speedy = 7
+                        vidas = 3
+                        placar = 0
+                        player = Ninja(groups, assets)
+                        all_sprites.add(player)
 
         #Mostra o novo frame pro jogador
         pygame.display.update()
