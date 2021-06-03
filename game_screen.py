@@ -205,6 +205,7 @@ def game_screen(window):
                 window.blit(assets['telainicial'], (0, 0))
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
+                        assets['watah_sound'].play()
                         state = INSTRUCTIONS
                         #print('a')
 
@@ -216,6 +217,7 @@ def game_screen(window):
                 window.blit(assets['instrucoes'], (0, 0))
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
+                        assets['watah_sound'].play()
                         state = PLAYING
 
         elif state == FINISH:
