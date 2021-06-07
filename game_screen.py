@@ -101,6 +101,7 @@ def game_screen(window):
                         #   player.rect.y = HEIGHT-200
                         if event.key == pygame.K_SPACE:
                             if numeroshurikens <= 3 and numeroshurikens > 0:
+                                assets['shuriken_sound'].play()  
                                 shuriken = player.shoot()
                                 all_sprites.add(shuriken)
                                 all_shurikens.add(shuriken)
