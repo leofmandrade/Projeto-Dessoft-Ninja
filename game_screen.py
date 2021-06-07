@@ -156,6 +156,7 @@ def game_screen(window):
                 # Verifica se houve colisão entre os obstáculos e o ninja
                 colidiuad = pygame.sprite.groupcollide(all_shurikens, all_obstacles, True, True)
                 for colisoes in colidiuad:
+                    assets['explosion_sound'].play()
                     explosao = Explosao(colisoes.rect.center, assets)
                     all_sprites.add(explosao)
             
