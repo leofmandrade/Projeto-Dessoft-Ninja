@@ -1,12 +1,13 @@
+#---Importando bibliotecas
 from os import path
 
 IMG_DIR = path.join(path.dirname(__file__), 'assets', 'img')
 SND_DIR = path.join(path.dirname(__file__), 'assets', 'snd')
 FNT_DIR = path.join(path.dirname(__file__), 'assets', 'font')
 
-WIDTH = 600 # Largura da tela
-HEIGHT = 750 # Altura da tela
-FPS = 30 # Frames por segundo
+WIDTH = 600     #Largura da tela
+HEIGHT = 750    #Altura da tela
+FPS = 30        #Frames por segundo
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

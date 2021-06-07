@@ -1,8 +1,10 @@
+#---Importando bibliotecas
 import pygame
 import os
 from config import IMG_DIR, SND_DIR, FNT_DIR
 color_key = (0, 89, 255)
 
+#---Estabelecendo os assets
 BACKGROUND = 'background'
 PAREDES = 'paredes'
 PLACA = 'placa'
@@ -31,6 +33,8 @@ EXPLOSION_SOUND = 'explosion_sound'
 
 pygame.init()
 
+
+#---Criação de uma função só para os assets
 def load_assets():
     #------Imagens do fundo
     assets = {}
@@ -40,17 +44,17 @@ def load_assets():
     assets['telainicial'] = pygame.image.load('assets/img/TELAINICIAL.png')
     assets['instrucoes'] = pygame.image.load('assets/img/PAGINAINSTRUCOES.png')
     assets['telafinal'] = pygame.image.load('assets/img/GAMEOVER.png')
-    #-----Imagens do ninja
-    #Logo Ninja
+
+    #-----Logo do ninja
     assets['logoninja'] = pygame.image.load(os.path.join(IMG_DIR,'LOGONINJA.png'))
-    #Ninja andando
+    #---Ninja andando
     assets['ninjadireita00'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAANDANDODIREITA00.png'))
     assets['ninjaesquerda00'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAANDANDOESQUERDA00.png'))
     assets['ninjadireita01'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAANDANDODIREITA01.png'))
     assets['ninjaesquerda01'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAANDANDOESQUERDA01.png'))
     assets['ninjainvencivel'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAINVENCIVELDIREITA.png'))
 
-    #Ninja Pulando
+    #---Ninja Pulando
     assets['ninjapulandod02'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAPULANDODIREITA02.png'))
     assets['ninjapulandoe02'] = pygame.image.load(os.path.join(IMG_DIR,'NINJAPULANDOESQUERDA02.png'))
 
@@ -61,8 +65,8 @@ def load_assets():
     assets['antenaesquerda']= pygame.transform.scale(assets['antenaesquerda'], (103, 94))
     assets['antenadireita']= pygame.image.load(os.path.join(IMG_DIR,'ANTENADIREITA.png'))
     assets['antenadireita']= pygame.transform.scale(assets['antenadireita'], (103, 94))
-    #-----Imagem do projétil
 
+    #-----Imagem do projétil
     assets['shuriken']= pygame.image.load(os.path.join(IMG_DIR,'SHURIKEN.png'))
 
     #-----Imagem da explosão
@@ -76,7 +80,6 @@ def load_assets():
     assets['explosao']= explosao
 
     # Carrega os sons do jogo
-
     assets['music'] = pygame.mixer.music.load(os.path.join(SND_DIR, 'Musica2.ogg'))
     assets['music'] = pygame.mixer.music.set_volume(0.2)
     assets['shuriken_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'ShurikenSound2.wav'))
@@ -84,11 +87,12 @@ def load_assets():
     assets['collision_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'CollisionSound.wav'))
     assets['watah_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'Watah.wav'))
     assets['explosion_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR,'ExplosionSound.wav'))
+
     #--------Carrega a fonte do placar
     assets['fonteplacar'] = pygame.font.Font(os.path.join(FNT_DIR,'game_over.ttf'), 100)
     assets['fontemenorpontuacao'] = pygame.font.Font(os.path.join(FNT_DIR,'game_over.ttf'), 60)
 
-    #--------FONTE DAS VIDAS
+    #--------Fonte das vidas
     assets['score_font'] = pygame.font.Font(os.path.join(FNT_DIR,'PressStart2P.ttf'), 28)
     return assets
 
