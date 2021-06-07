@@ -1,6 +1,6 @@
 from random import randint
 import pygame
-from config import WIDTH, HEIGHT, BLACK, YELLOW, RED
+from config import WIDTH, HEIGHT
 from assets import load_assets
 from sprites import Ninja, Cano, Antena, Explosao, Shuriken
 pygame.init()
@@ -228,6 +228,11 @@ def game_screen(window):
                     game = False
                 window.fill((255, 255, 255))  # Preenche com a cor branca)
                 window.blit(assets['telafinal'], (0, 0))
+                text_surface3 = assets['fonteplacar'].render("Seu score foi de: {:04d}".format(placar), True, (255, 255, 255))
+                text_rect3 = text_surface3.get_rect()
+                text_rect3.bottomright = (WIDTH-110, HEIGHT-200)
+                window.blit(text_surface3, text_rect3)
+
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
                         game = False
