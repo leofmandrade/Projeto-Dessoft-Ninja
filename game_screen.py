@@ -101,6 +101,7 @@ def game_screen(window):
                         #   player.rect.y = HEIGHT-200
                         if event.key == pygame.K_SPACE:
                             if numeroshurikens <= 3 and numeroshurikens > 0:
+                                assets['shuriken_sound'].play()  
                                 shuriken = player.shoot()
                                 all_sprites.add(shuriken)
                                 all_shurikens.add(shuriken)
@@ -155,6 +156,7 @@ def game_screen(window):
                 # Verifica se houve colisão entre os obstáculos e o ninja
                 colidiuad = pygame.sprite.groupcollide(all_shurikens, all_obstacles, True, True)
                 for colisoes in colidiuad:
+                    assets['explosion_sound'].play()
                     explosao = Explosao(colisoes.rect.center, assets)
                     all_sprites.add(explosao)
             

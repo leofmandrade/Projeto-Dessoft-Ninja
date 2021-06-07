@@ -98,7 +98,7 @@ class Shuriken(pygame.sprite.Sprite):
         # Se o tiro passar do inicio da tela, morre.
         if self.rect.bottom < 0:
             self.kill()  
-        self.shuriken_sound.play()   
+         
 
 #------------------ CANOS        
 class Cano(pygame.sprite.Sprite):
