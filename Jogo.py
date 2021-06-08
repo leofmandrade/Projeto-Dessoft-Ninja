@@ -1,3 +1,4 @@
+#---Importando bibliotecas e colocando as importando os demais arquivos para este código principal
 import pygame
 from pygame.constants import KEYDOWN
 from config import WIDTH, HEIGHT
