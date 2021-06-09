@@ -75,7 +75,6 @@ def game_screen(window):
                 speedy += 3
                 for obs in all_obstacles:
                     obs.speedy = speedy
-                print(speedy)
                 ticks_0 = 0
             ticks_0 += 1
             ticks_1 += 1
