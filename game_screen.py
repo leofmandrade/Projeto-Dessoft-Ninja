@@ -12,7 +12,7 @@ def game_screen(window):
     assets = load_assets()
 
     #---Variável para o ajuste de velocidade
-    FPS = 30
+    FPS = 60
     #---Criando dicionário de grupos
     groups = {}
     #---Sprites
