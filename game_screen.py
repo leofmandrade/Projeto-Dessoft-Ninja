@@ -72,7 +72,7 @@ def game_screen(window):
                 ticks_1 = 0
             #---Aumentando progressivamente a velocidade dos obstáculos
             if ticks_0 >= 600:
-                speedy += 3
+                speedy += 1.5
                 for obs in all_obstacles:
                     obs.speedy = speedy
                 ticks_0 = 0
